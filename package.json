@@ -1,0 +1,38 @@
+{
+  "name": "node-flow",
+  "version": "0.0.1",
+  "description": "Créateur de graph. Configurateur de graph. Graph générant du code ...",
+  "main": "./dist/electron.js",
+  "scripts": {
+    "debug": "node ./lib/build.js",
+    "debug-electron": "node ./lib/build.js --electron",
+    "prod": "node ./lib/build.js --prod",
+    "prod-electron": "node ./lib/build.js --prod --electron",
+    "electron": "electron ."
+  },
+  "keywords": [
+    "graph",
+    "node",
+    "flow",
+    "config"
+  ],
+  "author": "Nicolas Boyer",
+  "license": "MIT",
+  "devDependencies": {
+    "browser-sync": "^2.18.13",
+    "browserify": "^14.4.0",
+    "electron": "1.7.9",
+    "electron-connect": "^0.6.2",
+    "exorcist": "^1.0.0",
+    "ncp": "^2.0.0",
+    "tsify": "^3.0.3",
+    "tslint": "^5.7.0",
+    "typescript": "^2.5.3",
+    "uglifyify": "^4.0.4",
+    "watchify": "^3.9.0",
+    "yargs": "^9.0.1"
+  },
+  "dependencies": {
+    "svg.js": "^2.6.3"
+  }
+}
