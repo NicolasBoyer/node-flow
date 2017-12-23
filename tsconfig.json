@@ -11,12 +11,25 @@
     "allowJs": false,
     "newLine": "LF",
     "jsx": "react",
+    "jsxFactory": "NFJSX.createElement",
     "sourceMap": true,
     "removeComments": true,
     "noEmitOnError": true,
     "strict": true,
     "noImplicitAny": true,
-    "alwaysStrict": true
+    "alwaysStrict": true,
+    "baseUrl": "./src",
+    "paths": {
+      "canvas": ["ts/components/graph/canvas"],
+      "node": ["ts/components/graph/node"],
+      "library": ["ts/components/objects/library"],
+      "window": ["ts/components/ui/window"],
+      "button": ["ts/components/ui/button"],
+      "datas": ["ts/utils/datas"],
+      "dom": ["ts/utils/dom"],
+      "jsx": ["ts/utils/jsx"],
+      "windows-manager": ["ts/utils/windows-manager"]
+    }
   },
   "include":[
     "src"

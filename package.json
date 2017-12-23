@@ -25,6 +25,7 @@
     "electron-connect": "^0.6.2",
     "exorcist": "^1.0.0",
     "ncp": "^2.0.0",
+    "pathmodify": "^0.5.0",
     "tsify": "^3.0.3",
     "tslint": "^5.7.0",
     "typescript": "^2.5.3",

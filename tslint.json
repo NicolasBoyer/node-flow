@@ -4,6 +4,10 @@
         "tslint:recommended"
     ],
     "jsRules": {},
-    "rules": {},
+    "rules": {
+        "member-access": false,
+        "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"],
+        "max-line-length": false
+    },
     "rulesDirectory": []
 }
