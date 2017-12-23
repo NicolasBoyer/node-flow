@@ -91,6 +91,10 @@ export default class WindowsManager {
             // Veut on docker si on est déjà docker
             // Peut etre passer la fonction de retour de taille dans ghostdocked
             this._ghostDocked("left", windowSize.top + "px", "0px", "400px", windowSize.height + "px");
+
+            // ICI !!!!
+            // Appel des fonctions dock des différentes fenetres concernées dans dockedWindows
+
             // console.log("left", windowSize.top + "px", "0px", windowSizeAfterDocked + "px", windowSize.height + "px", "0")
         }
         if (mouseEvent.clientX > window.innerWidth - mouseDockedPosition) {
