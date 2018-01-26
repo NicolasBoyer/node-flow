@@ -19,19 +19,19 @@
   "author": "Nicolas Boyer",
   "license": "MIT",
   "devDependencies": {
-    "browser-sync": "^2.23.2",
-    "browserify": "^14.5.0",
-    "electron": "^1.7.10",
-    "electron-connect": "^0.6.2",
+    "browser-sync": "^2.23.6",
+    "browserify": "^15.2.0",
+    "electron": "1.7.11",
+    "electron-connect": "^0.6.3",
     "exorcist": "^1.0.0",
     "ncp": "^2.0.0",
     "pathmodify": "^0.5.0",
     "tsify": "^3.0.4",
-    "tslint": "^5.8.0",
+    "tslint": "^5.9.1",
     "typescript": "^2.6.2",
     "uglifyify": "^4.0.5",
     "watchify": "^3.9.0",
-    "yargs": "^10.1.0"
+    "yargs": "^11.0.0"
   },
   "dependencies": {
     "svg.js": "^2.6.3"
