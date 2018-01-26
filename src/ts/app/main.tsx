@@ -30,7 +30,7 @@ windowsManager.initEvents();
 
 // win.hide();
 // document.body.appendChild(win);
-const win2 = document.body.appendChild(<nf-window width="800" draggable="true" resizable="true" title="Other"><div>blirp</div></nf-window>);
+const win2 = document.body.appendChild(<nf-window width="800" draggable="true" resizable="true" title="Other"><div>By default, if an element has shadow DOM, the shadow tree is rendered instead of the element's children. To allow children to render, you need to add placeholders for them in your shadow tree. To do this in shadow DOM v1:</div></nf-window>);
 const win = document.body.appendChild(<nf-window width="600" draggable="true" resizable="true" center="true" title="Configurer les nodes"><div>blirp</div></nf-window>);
 // eventsManager.addWindow(win)
 // eventsManager.addWindow(win2)
@@ -41,7 +41,7 @@ const win = document.body.appendChild(<nf-window width="600" draggable="true" re
 const settings = document.body.appendChild(<nf-button title="Paramètres" type="maximize" class="maximize" style="position:absolute;top:0;font-size: xx-large;left: 1em;height: 1em;width: 1em;cursor: pointer;"></nf-button>);
 
 settings.onclick = (ev: MouseEvent) => {
-    document.body.appendChild(<nf-window width="800" center="true" draggable="true" resizable="true" title="Autre"><div>blirp</div></nf-window>);
+    document.body.appendChild(<nf-window width="800" center="true" draggable="true" resizable="true" title="Autre"><div>Machin</div></nf-window>);
 };
 
 // document.onmousemove = (event: MouseEvent) => {
@@ -58,3 +58,5 @@ settings.onclick = (ev: MouseEvent) => {
 // Peut-etre commencer par mettre en place le configurateur prefs etnodes conf
 // passer la librairie au canvas puis à node sans doute ou alors accessible de partout ...
 const canvas = new Canvas("drawing");
+
+// polyfills events service worker

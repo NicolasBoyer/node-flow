@@ -71,4 +71,8 @@ export namespace DOM {
         document.body.removeChild(window);
         return windowsize;
     }
+
+    export function parseStyleToNumber(style: string | null) {
+        return parseInt(String(style), 10);
+    }
 }

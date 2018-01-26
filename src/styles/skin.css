@@ -22,6 +22,10 @@ nf-window {
     };
 }
 
+nf-window.docked_left {
+    box-shadow: 12px 0 20px -12px #444;
+}
+
 .invisible {
     display: none;
 }
@@ -35,7 +39,7 @@ nf-window {
 }
 
 .ghostWindow {
-    transition: all 0.25s ease-in-out;
+    transition: all 0.15s ease-in-out;
     background : rgba(256, 256, 256, 0.1);
     border : 1px solid rgba(256, 256, 256, 0.25);
     position : absolute;

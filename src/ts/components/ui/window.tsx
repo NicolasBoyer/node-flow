@@ -152,6 +152,7 @@ export default class Window extends HTMLElement {
     protected _startMouseY: number;
     protected _titleElement: HTMLElement;
     protected _bbox: HTMLElement;
+    protected _container: HTMLElement;
     // A supprimer
     // protected _ghost: HTMLElement;
     protected _options: IWindowOpts;
@@ -174,8 +175,7 @@ export default class Window extends HTMLElement {
         }
         this._style = shadow.appendChild(<style></style>);
         this._bbox = shadow.appendChild(<div class="bbox"></div>);
-        const win = shadow.appendChild(<div class="container"></div>);
-        this._content = win.appendChild(<div class="content"></div>);
+        this._container = shadow.appendChild(<div class="container"></div>);
     }
 
     connectedCallback() {
@@ -270,7 +270,8 @@ export default class Window extends HTMLElement {
         `;
         this.id = DOM.generateId();
         this._setOpts();
-        this._titleElement = this._content.appendChild(<div class="title"><span>{this.title}</span></div>);
+        this._titleElement = this._container.appendChild(<div class="title"><span>{this.title}</span></div>);
+        this._content = this._container.appendChild(<div class="content"><slot></slot></div>);
         if (this._isMaximizedButton) {
             this._minimizeButton = <nf-button title="Réduire" type="minimize" class="minimize" onclick={() => this.minimize()}></nf-button>;
             this._titleElement.appendChild(this._minimizeButton);
@@ -429,6 +430,33 @@ export default class Window extends HTMLElement {
         this._isOnEdge.right = x >= this.width;
         this._isOnEdge.bottom = y >= this.height;
         this._changeCursor();
+    }
+
+    toggleDocked(position: string,  isDocked: boolean, top: number = 0, left: number = 0, width: number = 0, height: number = 0) {
+        if (!this.isDocked[position]) {
+            this._sizeInfos = {width: this.width, height: this.height, minWidth: this.minWidth, minHeight: this.minHeight};
+        }
+        this.isDocked[position] = isDocked;
+        if (this.isDocked[position]) {
+            this.width = width;
+            this.height = height;
+            this.minWidth = 0;
+            this.minHeight = 0;
+            this.left = left;
+            this.top = top;
+            this.classList.add("docked_" + position);
+        } else {
+            if (!this._isDragging) {
+                this.top = 0;
+                this.left = 0;
+            }
+            this.width = this._sizeInfos.width || 0;
+            this.height = this._sizeInfos.height || 0;
+            this.minWidth = this._sizeInfos.minWidth || 0;
+            this.minHeight = this._sizeInfos.minHeight || 0;
+            this.classList.remove("docked_" + position);
+        }
+        this._setBboxSize();
     }
 
     // Opts
