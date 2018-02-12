@@ -19,6 +19,7 @@
     "noImplicitAny": true,
     "alwaysStrict": true,
     "baseUrl": "./src",
+    "strictPropertyInitialization": false,
     "paths": {
       "canvas": ["ts/components/graph/canvas"],
       "node": ["ts/components/graph/node"],

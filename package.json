@@ -28,12 +28,12 @@
     "pathmodify": "^0.5.0",
     "tsify": "^3.0.4",
     "tslint": "^5.9.1",
-    "typescript": "^2.6.2",
+    "typescript": "^2.7.1",
     "uglifyify": "^4.0.5",
-    "watchify": "^3.9.0",
+    "watchify": "^3.10.0",
     "yargs": "^11.0.0"
   },
   "dependencies": {
-    "svg.js": "^2.6.3"
+    "svg.js": "^2.6.4"
   }
 }
