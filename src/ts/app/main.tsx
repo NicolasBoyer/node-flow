@@ -60,3 +60,5 @@ settings.onclick = (ev: MouseEvent) => {
 const canvas = new Canvas("drawing");
 
 // polyfills events service worker
+// penser au menu, popupwindow, node configurator, tabwindow et peut-etre l'idée de partir moi aussi sur une tabwindow au départ
+// Créer un web app compiler (comme scmobile), puis un wineasy (gestinnaire de fenetre en js), un windowscreator utilisant tout ça (à voir) et enfin un node flow utilisé ensuite dans windows creator
