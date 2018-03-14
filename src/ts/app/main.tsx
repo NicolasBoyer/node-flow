@@ -57,6 +57,7 @@ settings.onclick = (ev: MouseEvent) => {
 
 // Peut-etre commencer par mettre en place le configurateur prefs etnodes conf
 // passer la librairie au canvas puis à node sans doute ou alors accessible de partout ...
+// Utiliser indexeddb pour la sauvegarde avec mise en place d'un fichier ...
 const canvas = new Canvas("drawing");
 
 // polyfills events service worker
