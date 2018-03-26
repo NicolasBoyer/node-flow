@@ -32,7 +32,8 @@ export default class Window extends HTMLElement {
     // style
     [key: string]: any;
 
-    isDocked: IOnPosition = {top: false, bottom: false, left: false, right: false};
+    isDocked: boolean = false;
+    dockedPosition: string = "";
 
     // A revoir peut etre avec les slots
     protected _content: HTMLElement;
@@ -432,12 +433,13 @@ export default class Window extends HTMLElement {
         this._changeCursor();
     }
 
-    toggleDocked(position: string,  isDocked: boolean, top: number = 0, left: number = 0, width: number = 0, height: number = 0) {
-        if (!this.isDocked[position]) {
+    toggleDocked(isDocked: boolean, position: string = "", top: number = 0, left: number = 0, width: number = 0, height: number = 0) {
+        if (!this.isDocked) {
             this._sizeInfos = {width: this.width, height: this.height, minWidth: this.minWidth, minHeight: this.minHeight};
         }
-        this.isDocked[position] = isDocked;
-        if (this.isDocked[position]) {
+        this.isDocked = isDocked;
+        this.dockedPosition = position;
+        if (this.isDocked) {
             this.width = width;
             this.height = height;
             this.minWidth = 0;
@@ -454,7 +456,7 @@ export default class Window extends HTMLElement {
             this.height = this._sizeInfos.height || 0;
             this.minWidth = this._sizeInfos.minWidth || 0;
             this.minHeight = this._sizeInfos.minHeight || 0;
-            this.classList.remove("docked_" + position);
+            DOM.removeClassByPrefix(this, "docked_");
         }
         this._setBboxSize();
     }

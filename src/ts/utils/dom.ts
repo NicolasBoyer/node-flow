@@ -75,4 +75,9 @@ export namespace DOM {
     export function parseStyleToNumber(style: string | null) {
         return parseInt(String(style), 10);
     }
+
+    export function removeClassByPrefix(element: HTMLElement, prefix: string) {
+        const regx = new RegExp("\\b" + prefix + ".*?\\b", "g");
+        [...element.classList].map((className) => regx.test(className) && element.classList.remove(className));
+    }
 }

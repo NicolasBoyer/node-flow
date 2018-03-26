@@ -26,10 +26,10 @@
       "library": ["ts/components/objects/library"],
       "window": ["ts/components/ui/window"],
       "button": ["ts/components/ui/button"],
+      "windows-manager": ["ts/components/ui/windows-manager"],
       "datas": ["ts/utils/datas"],
       "dom": ["ts/utils/dom"],
-      "jsx": ["ts/utils/jsx"],
-      "windows-manager": ["ts/utils/windows-manager"]
+      "jsx": ["ts/utils/jsx"]
     }
   },
   "include":[

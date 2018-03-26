@@ -21,7 +21,7 @@
   "devDependencies": {
     "browser-sync": "^2.23.6",
     "browserify": "^15.2.0",
-    "electron": "1.7.11",
+    "electron": "1.7.12",
     "electron-connect": "^0.6.3",
     "exorcist": "^1.0.1",
     "ncp": "^2.0.0",
