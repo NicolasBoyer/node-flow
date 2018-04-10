@@ -26,10 +26,10 @@
     "exorcist": "^1.0.1",
     "ncp": "^2.0.0",
     "pathmodify": "^0.5.0",
+    "tinyify": "^2.4.0",
     "tsify": "^3.0.4",
     "tslint": "^5.9.1",
     "typescript": "^2.7.2",
-    "uglifyify": "^4.0.5",
     "watchify": "^3.11.0",
     "yargs": "^11.1.0"
   },

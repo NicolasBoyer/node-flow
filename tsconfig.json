@@ -21,15 +21,12 @@
     "baseUrl": "./src",
     "strictPropertyInitialization": false,
     "paths": {
-      "canvas": ["ts/components/graph/canvas"],
-      "node": ["ts/components/graph/node"],
-      "library": ["ts/components/objects/library"],
-      "window": ["ts/components/ui/window"],
-      "button": ["ts/components/ui/button"],
-      "windows-manager": ["ts/components/ui/windows-manager"],
-      "datas": ["ts/utils/datas"],
-      "dom": ["ts/utils/dom"],
-      "jsx": ["ts/utils/jsx"]
+      "*": [
+        "ts/components/ui/*",
+        "ts/components/graph/*",
+        "ts/components/objects/*",
+        "ts/utils/*"
+      ]
     }
   },
   "include":[

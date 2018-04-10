@@ -11,12 +11,14 @@ export default class WindowsManager {
         return this._windowsObj;
     }
     protected _ghostWindow: HTMLElement;
+    protected _dockedWindows: Map<Window, {top: number, left: number, width: number, height: number, index: number}>;
+    protected _ghostWindowTop: number = 0;
+    protected _ghostWindowLeft: number = 0;
     protected _mouseDockedPosition: number = 10;
     protected _windowSizeAfterDocked: number = 400;
     protected _isGhostDocked: boolean = false;
     protected _ghostDockedPosition: string = "";
     protected _isCurrentWindowSelected: boolean = false;
-    protected _dockedWindows: Map<Window, { top: number; left: number; width: number; height: number; index: number; }>;
 
     initEvents() {
         document.addEventListener("mousemove", (event: MouseEvent) => {
@@ -31,12 +33,7 @@ export default class WindowsManager {
         }, true);
         document.addEventListener("windowCreated", (event) => this.addWindow((event as CustomEvent).detail), true);
         document.addEventListener("windowClosed", (event) => this.removeWindow((event as CustomEvent).detail), true);
-        document.addEventListener("windowClicked", (event) => {
-            this.setInFront((event as CustomEvent).detail);
-
-            // A revoir pas sur mais réfléchir si on le met ici
-            this._dockedWindows = this._getDockedWindows();
-        }, true);
+        document.addEventListener("windowClicked", (event) => this.setInFront((event as CustomEvent).detail), true);
         document.addEventListener("windowIsDragging", (event) => {
             this._isCurrentWindowSelected = true;
             this._undockCurrentWindow();
@@ -94,53 +91,13 @@ export default class WindowsManager {
         if (this._ghostWindow && mouseEvent.clientX >= this._mouseDockedPosition && mouseEvent.clientX <= window.innerWidth - this._mouseDockedPosition && mouseEvent.clientY >= this._mouseDockedPosition && mouseEvent.clientY <= window.innerHeight - this._mouseDockedPosition) {
             const ghostDockedPosition = this._ghostDockedPosition;
             this._removeGhostWindow();
-            this._resetAllDockedWindows(ghostDockedPosition);
+            this._resetAllDockedWindows(ghostDockedPosition, this._dockedWindows);
         } else {
             const position: string = mouseEvent.clientX < this._mouseDockedPosition ? "left" : mouseEvent.clientX > window.innerWidth - this._mouseDockedPosition ? "right" : mouseEvent.clientY < this._mouseDockedPosition ? "top" : mouseEvent.clientY > window.innerHeight - this._mouseDockedPosition ? "bottom" : "";
             if (position === "") {
                 return;
             }
-            const windowSize = DOM.getWindowSize();
-            let ghostWindowTop: number = 0;
-            let ghostWindowLeft: number = 0;
-            let ghostWindowWidth: number = 0;
-            let ghostWindowHeight: number = 0;
-            switch (position) {
-                case "left":
-                case "right":
-                    ghostWindowTop = this._dockedWindows.size >= 1 && mouseEvent.clientY > windowSize.height / 2 ? windowSize.height - windowSize.height / (this._dockedWindows.size + 1) : 0;
-                    ghostWindowLeft = position === "left" ? 0 : windowSize.width - this._windowSizeAfterDocked;
-                    ghostWindowWidth = this._windowSizeAfterDocked;
-                    ghostWindowHeight = windowSize.height / (this._dockedWindows.size + 1);
-                    break;
-                case "top":
-                case "bottom":
-                    ghostWindowTop = position === "top" ? 0 : windowSize.height - this._windowSizeAfterDocked;
-                    ghostWindowLeft = this._dockedWindows.size >= 1 && mouseEvent.clientX > windowSize.width / 2 ? windowSize.width - windowSize.width / (this._dockedWindows.size + 1) : 0;
-                    ghostWindowWidth = windowSize.width / (this._dockedWindows.size + 1);
-                    ghostWindowHeight = this._windowSizeAfterDocked;
-                    break;
-            }
-            this._addGhostWindow(position, ghostWindowTop + "px", ghostWindowLeft + "px", ghostWindowWidth + "px", ghostWindowHeight + "px");
-
-            // Appel des fonctions dock des différentes fenetres concernées dans dockedWindows -> a faire dans une autre fonction pour l'appeler aussi quand on suppr une fenetre dickée
-
-            // En gros on va sortir ce truc et le addghostwin pour pas les répéter et c la pos qui changera en fonction de left, right ...
-            // Revoir pareil reset docked window
-
-            // Essayer de le mettre dans reset all docked pos
-
-            this._resetAllDockedWindows(position);
-            // => marche je pense si dans cette fonction ondemande si y a un dockedghostdockedpos
-
-            // A finaliser en bas marche pas
-            // this._dockedWindows.forEach((windowInfos, window) => {
-            //     if (windowInfos) {
-            //         const top = position === "left" || position === "right" ? (ghostWindowTop === 0 ? ghostWindowHeight * (windowInfos.index + 1) : ghostWindowHeight * windowInfos.index) : ghostWindowTop;
-            //         const left = position === "top" || position === "bottom" ? (ghostWindowLeft === 0 ? ghostWindowWidth * (windowInfos.index + 1) : ghostWindowWidth * windowInfos.index) : ghostWindowLeft;
-            //         window.toggleDocked(true, position, top, left, ghostWindowWidth, ghostWindowHeight);
-            //     }
-            // });
+            this._addGhostWindow(position, mouseEvent);
         }
     }
 
@@ -156,36 +113,45 @@ export default class WindowsManager {
         }
     }
 
-    protected _resetAllDockedWindows(position: string) {
+    protected _resetAllDockedWindows(position: string, dockedWindows: Map<Window, {top: number, left: number, width: number, height: number, index: number}> | null = null) {
         if (position === "") {
             return;
         }
-
-        // manque la variable d'emplacement lié au placement du dockedwindow => fait mais à améliorer + voir si pas moye, de mutualiser les position avec la fonction check...
-        this._dockedWindows = this._getDockedWindows();
-        const dockedWindowSize = this._isGhostDocked  ? this._dockedWindows.size + 1 : this._dockedWindows.size;
+        // prendre en compte les windocked en top ou bottom et inverse
+        const topDockedWindowHeight = this._getDockedWindows("top").size > 0 ? this._getDockedWindows("top").values().next().value.height : 0;
+        const bottomDockedWindowHeight = this._getDockedWindows("bottom").size > 0 ? this._getDockedWindows("bottom").values().next().value.height : 0;
+        // const leftDockedWindowHeight = (position === "top" || position === "bottom") && this._getDockedWindows("left").size > 0 ? this._getDockedWindows("left").values().next().value.height : 0;
+        // const rightDockedWindowHeight = (position === "top" || position === "bottom") && this._getDockedWindows("right").size > 0 ? this._getDockedWindows("right").values().next().value.height : 0;
+        this._dockedWindows = dockedWindows || this._getDockedWindows(position);
+        const dockedWindowSize = this._isGhostDocked ? this._dockedWindows.size + 1 : this._dockedWindows.size;
         const windowSize = DOM.getWindowSize();
         this._dockedWindows.forEach((windowInfos, window) => {
-            if (windowInfos && window.dockedPosition === position) {
-
-                // A améliorer pb probablement sur le top
-                const indexTop = this._isGhostDocked && this._ghostWindow && DOM.parseStyleToNumber(this._ghostWindow.style.top) === 0 ? windowInfos.index + 1 : windowInfos.index;
-                const indexLeft = this._isGhostDocked && this._ghostWindow && DOM.parseStyleToNumber(this._ghostWindow.style.left) === 0 ? windowInfos.index + 1 : windowInfos.index;
-
-                const height = position === "left" || position === "right" ? windowSize.height / dockedWindowSize : this._windowSizeAfterDocked;
-                const width = position === "top" || position === "bottom" ? windowSize.width / dockedWindowSize : this._windowSizeAfterDocked;
-                const top = position === "left" || position === "right" ? height * indexTop : position === "bottom" ? windowSize.height - this._windowSizeAfterDocked : 0;
-                const left = position === "top" || position === "bottom" ? width * indexLeft : position === "right" ? windowSize.width - this._windowSizeAfterDocked : 0;
-                window.toggleDocked(true, position, top, left, width, height);
+            const indexTop = this._isGhostDocked && this._ghostWindowTop === topDockedWindowHeight ? windowInfos.index + 1 : windowInfos.index;
+            const indexLeft = this._isGhostDocked && this._ghostWindowLeft === 0 ? windowInfos.index + 1 : windowInfos.index;
+            const height = position === "left" || position === "right" ? (windowSize.height - topDockedWindowHeight - bottomDockedWindowHeight) / dockedWindowSize : this._windowSizeAfterDocked;
+            const width = position === "top" || position === "bottom" ? windowSize.width / dockedWindowSize : this._windowSizeAfterDocked;
+            const top = position === "left" || position === "right" ? height * indexTop + topDockedWindowHeight : position === "bottom" ? windowSize.height - this._windowSizeAfterDocked : 0;
+            const left = position === "top" || position === "bottom" ? width * indexLeft : position === "right" ? windowSize.width - this._windowSizeAfterDocked : 0;
+            window.toggleDocked(true, position, top, left, width, height);
+        });
+        // A faire pour right
+        const dockedLeftWindows = this._getDockedWindows("left");
+        dockedLeftWindows.forEach((windowInfos, window) => {
+            if (position === "top" || position === "bottom") {
+                console.log(topDockedWindowHeight)
+                // Pos en top marche pas encore
+                const top = position === "top" && this._isGhostDocked ? this._windowSizeAfterDocked * (windowInfos.index + 1) : topDockedWindowHeight * windowInfos.index;
+                const height = position === "bottom" ? windowInfos.height - this._windowSizeAfterDocked : (windowSize.height - topDockedWindowHeight) / dockedLeftWindows.size;
+                window.toggleDocked(true, "left", top, windowInfos.left, windowInfos.width, height);
             }
         });
     }
 
-    protected _getDockedWindows() {
+    protected _getDockedWindows(position: string) {
         const dockedWindows: Map<Window, {top: number, left: number, width: number, height: number, index: number}> = new Map<Window, {top: number, left: number, width: number, height: number, index: number}>();
         let count = 0;
         this._windowsArr.forEach((win) => {
-            if (win.isDocked) {
+            if (win.isDocked && win.dockedPosition === position) {
                 dockedWindows.set(win, {top: win.top, left: win.left, width: win.width, height: win.height, index: count});
                 count++;
             }
@@ -200,9 +166,32 @@ export default class WindowsManager {
         }
     }
 
-    protected _addGhostWindow(position: string, top: string, left: string, width: string, height: string) {
+    protected _addGhostWindow(position: string, mouseEvent: MouseEvent | null = null) {
         if (this._isGhostDocked) {
             return;
+        }
+        this._dockedWindows = this._getDockedWindows(position);
+        const windowSize = DOM.getWindowSize();
+        let ghostWindowWidth: number = 0;
+        let ghostWindowHeight: number = 0;
+        switch (position) {
+            case "left":
+            case "right":
+                const topDockedWindowHeight = this._getDockedWindows("top").size > 0 ? this._getDockedWindows("top").values().next().value.height : 0;
+                const bottomDockedWindowHeight = this._getDockedWindows("bottom").size > 0 ? this._getDockedWindows("bottom").values().next().value.height : 0;
+
+                this._ghostWindowTop = this._dockedWindows.size >= 1 && mouseEvent && mouseEvent.clientY > (windowSize.height + topDockedWindowHeight - bottomDockedWindowHeight) / 2 ? windowSize.height - (windowSize.height - topDockedWindowHeight + bottomDockedWindowHeight) / (this._dockedWindows.size + 1) : topDockedWindowHeight;
+                this._ghostWindowLeft = position === "left" ? 0 : windowSize.width - this._windowSizeAfterDocked;
+                ghostWindowWidth = this._windowSizeAfterDocked;
+                ghostWindowHeight = (windowSize.height - topDockedWindowHeight - bottomDockedWindowHeight) / (this._dockedWindows.size + 1);
+                break;
+            case "top":
+            case "bottom":
+                this._ghostWindowTop = position === "top" ? 0 : windowSize.height - this._windowSizeAfterDocked;
+                this._ghostWindowLeft = this._dockedWindows.size >= 1 && mouseEvent && mouseEvent.clientX > windowSize.width / 2 ? windowSize.width - windowSize.width / (this._dockedWindows.size + 1) : 0;
+                ghostWindowWidth = windowSize.width / (this._dockedWindows.size + 1);
+                ghostWindowHeight = this._windowSizeAfterDocked;
+                break;
         }
         this._ghostWindow = document.body.appendChild(<div class="ghostWindow"></div>);
         this._ghostWindow.style.position = this._currentWindow.style.position;
@@ -212,13 +201,14 @@ export default class WindowsManager {
         this._ghostWindow.style.width = this._currentWindow.style.width;
         this._ghostWindow.style.zIndex = String(Number(this._currentWindow.style.zIndex) - 1);
         setTimeout(() => {
-            this._ghostWindow.style.top = top;
-            this._ghostWindow.style.left = left;
-            this._ghostWindow.style.width = width;
-            this._ghostWindow.style.height = height;
+            this._ghostWindow.style.top = String(this._ghostWindowTop) + "px";
+            this._ghostWindow.style.left = String(this._ghostWindowLeft) + "px";
+            this._ghostWindow.style.width = String(ghostWindowWidth) + "px";
+            this._ghostWindow.style.height = String(ghostWindowHeight) + "px";
         }, 50);
         this._isGhostDocked = true;
         this._ghostDockedPosition = position;
+        this._resetAllDockedWindows(position, this._dockedWindows);
     }
 
     protected _removeGhostWindow() {
