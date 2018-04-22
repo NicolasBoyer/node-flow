@@ -1,5 +1,5 @@
-import { DatasMgr, EStorageKey } from "datas";
-import { IPrefsConfig } from "dom";
+import { IPrefsConfig } from "interfaces";
+import { DatasMgr, EStorageKey } from "store";
 import * as SVG from "svg.js";
 
 export default class Canvas {

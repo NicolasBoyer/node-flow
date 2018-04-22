@@ -1,5 +1,10 @@
-import { DatasMgr, EStorageKey } from "datas";
-import { INodeConfig } from "dom";
+interface INodeConfig {
+    width: number;
+    height: number;
+    color: string;
+}
+
+import { DatasMgr, EStorageKey } from "store";
 
 export default class Library {
     readonly name: string;

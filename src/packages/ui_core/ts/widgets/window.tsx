@@ -1,6 +1,6 @@
 import Button from "button";
 import { DOM } from "dom";
-import { NFJSX } from "jsx";
+import { JSX } from "jsx";
 
 interface IWindowOpts {
     [key: string]: any;
@@ -214,7 +214,7 @@ export default class Window extends HTMLElement {
                 text-align: left;
                 padding-left: 0.6em;
             }
-            .title nf-button {
+            .title ui-button {
                 flex: 0 1 auto;
                 align-self: auto;
                 min-width: 48px;
@@ -223,20 +223,20 @@ export default class Window extends HTMLElement {
             .bbox {
                 position: absolute;
             }
-            nf-button {
+            ui-button {
                 background: none;
                 color: #282828;
                 border: none;
                 font-size: x-large;
                 padding: 0;
             }
-            nf-button span {
+            ui-button span {
                 display: none;
             }
-            nf-button:hover {
+            ui-button:hover {
                 background: #d0d0d0;
             }
-            nf-button.close:hover {
+            ui-button.close:hover {
                 background: #ef2a2a;
                 color: #fff;
             }
@@ -274,19 +274,19 @@ export default class Window extends HTMLElement {
         this._titleElement = this._container.appendChild(<div class="title"><span>{this.title}</span></div>);
         this._content = this._container.appendChild(<div class="content"><slot></slot></div>);
         if (this._isMaximizedButton) {
-            this._minimizeButton = <nf-button title="Réduire" type="minimize" class="minimize" onclick={() => this.minimize()}></nf-button>;
+            this._minimizeButton = <ui-button title="Réduire" type="minimize" class="minimize" onclick={() => this.minimize()}></ui-button>;
             this._titleElement.appendChild(this._minimizeButton);
         }
         if (this._isMinimizedButton) {
-            this._maximizeButton = <nf-button title="Agrandir" type="maximize" class="maximize" onclick={() => this.maximize()}></nf-button>;
+            this._maximizeButton = <ui-button title="Agrandir" type="maximize" class="maximize" onclick={() => this.maximize()}></ui-button>;
             this._titleElement.appendChild(this._maximizeButton);
         }
         if (this._isClosedButton) {
-            const closeButton = <nf-button title="Fermer" type="close" class="close" onclick={() => {
+            const closeButton = <ui-button title="Fermer" type="close" class="close" onclick={() => {
                 this.classList.add("animate");
                 this.classList.add("fadeout");
                 setTimeout(() => this.destroy(), 200);
-            }}></nf-button>;
+            }}></ui-button>;
             this._titleElement.appendChild(closeButton);
         }
         this._icon = DOM.addIcon("folder_close", this._titleElement, this._titleElement.firstChild);
@@ -697,4 +697,4 @@ export default class Window extends HTMLElement {
     // shadow dom et touch - besoin d'un util pour normaliser les events et gérer le touch
 }
 
-customElements.define("nf-window", Window);
+customElements.define("ui-window", Window);

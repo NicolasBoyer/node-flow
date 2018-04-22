@@ -1,5 +1,5 @@
 import { DOM } from "dom";
-import { NFJSX } from "jsx";
+import { JSX } from "jsx";
 
 interface IButtonOpts {
     title?: string;
@@ -78,4 +78,4 @@ export default class Button extends HTMLElement {
     }
 }
 
-customElements.define("nf-button", Button);
+customElements.define("ui-button", Button);

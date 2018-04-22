@@ -8,15 +8,15 @@ const pathmodify = require('pathmodify');
 const exorcist   = require('exorcist');
 const watchify = require('watchify');
 const browserSync = require('browser-sync').create();
-const electron = require('electron-connect').server.create();
+const electronServer = require('electron-connect').server;
 // CONSTANTES
 const inputDirectoryName = "src";
 const outFileName = "bundle.js";
 const outDirectoryName = "dist";
-const electronStartFile = './'+ inputDirectoryName +'/ts/app/electron.ts';
+const electronStartFile = '../main_core/ts/electron.ts';
 // GLOBALS
 var includeFiles = [];
-var filesToCopy, outFilePath, bundler, outputDir;
+var filesToCopy, outFilePath, bundler, outputDir, electron;
 var pathModify = {mods: []};
 // ARGS
 var argv = require('yargs')
@@ -30,21 +30,43 @@ init = function() {
     const tsconfig =  JSON.parse(files.readFileSync('./tsconfig.json', 'utf8'));
     // Gestion des fichiers à copier
     tsconfig.include.forEach((directory) => {
-        var allFiles = files.getAllFiles(directory);
+        var allFiles = files.getAllFiles(directory, [files.getCurrentDirectoryBase(), "tsconfig.json"]);
         includeFiles = includeFiles.concat(allFiles.tsFiles);
         // Création du path modify pour mettre les urls relatives des modules
         allFiles.importFiles.forEach((files) => pathModify.mods.push(pathmodify.mod.id(files.name, process.cwd() + '/' + files.path)));
         filesToCopy = allFiles.cssFiles.concat(allFiles.htmlFiles, allFiles.imgFiles, allFiles.jsFiles);
     });
+
+
+    // A améliorer ou à virer
+    // var test = files.getAllFiles("node_modules", []);
+    // test.importFiles.forEach((files) => pathModify.mods.push(pathmodify.mod.id(files.name, process.cwd() + '/' + files.path)));
+    // e:/Devs/WebApps/node-flow/src/packages/bootstrap_core/node_modules/svg.js/svg.js
+    pathModify.mods.push(pathmodify.mod.id("svg.js", process.cwd() + '/' + "node_modules/svg.js"))
+
+    // Pas utile à suppr
+    // pathModify.mods.push(pathmodify.mod.id("electron", process.cwd() + '/' + "node_modules/electron"))
+
+    ///
+
+
     files.remove(outDirectoryName);
     outputDir = files.createDir(outDirectoryName);
     outFilePath = outputDir + '/' + outFileName;
     files.createFile(outFilePath);
+
+
+    // A réparer car le reload fonctionne pas
+    if (isElectron) electron = electronServer.create();
+
+
     transpile(!isProd, isProd).then(() => copyFiles().then(() => {
         if (isElectron) {
             electron.start();
-            startElectron();
-        } else browserSync.init({server: "./dist"});
+
+            // A voir car ne se met pas à jour -> A retester
+            // startElectron();
+        } else browserSync.init({server: "./" + outDirectoryName});
     }));
 }
 
@@ -63,8 +85,8 @@ copyFiles = function() {
 }
 
 copyFile = function(file) {
-    return new Promise(function (resolve) {  
-        files.copy(file, outputDir + '/' + file.substring(inputDirectoryName.length)).then(() => {
+    return new Promise(function (resolve) {
+        files.copy(file, outputDir + '\\' + file.substring(6)).then(() => {
             console.log(file + ' a été copié dans ' + outputDir);
             resolve();
         });
@@ -118,6 +140,8 @@ bundle = function() {
     });  
 }
 
+
+// A suppr aussi sans doute
 startElectron = function() {
     console.log("Electron démarré ...")
     runCommand('npm run electron', () => {

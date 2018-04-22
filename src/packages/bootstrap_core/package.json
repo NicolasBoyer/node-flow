@@ -1,8 +1,12 @@
 {
   "name": "node-flow",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Créateur de graph. Configurateur de graph. Graph générant du code ...",
   "main": "./dist/electron.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NicolasBoyer/node-flow.git"
+  },
   "scripts": {
     "debug": "node ./lib/build.js",
     "debug-electron": "node ./lib/build.js --electron",

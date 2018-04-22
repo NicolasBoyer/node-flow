@@ -12,6 +12,7 @@ function createWindow() {
         },
         // width: 800,
     });
+    win.maximize();
     win.loadURL(process.cwd() + "//dist/index.html");
     win.webContents.executeJavaScript(`require('electron-connect').client.create();`);
     win.on("closed", () => win = null);

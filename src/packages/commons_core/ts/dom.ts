@@ -1,19 +1,3 @@
-// Interfaces
-export interface IPrefsConfig {
-    canvasSize: number;
-    backgroundColor: string;
-    isGridBackground?: boolean;
-    zoomIntensity: number;
-    zoomLevel: number;
-}
-
-export interface INodeConfig {
-    width: number;
-    height: number;
-    color: string;
-}
-
-// Utils
 // tslint:disable-next-line:no-namespace
 export namespace DOM {
     export function addIcon(name: string, parent: HTMLElement, elementAfter?: Node | null): SVGSVGElement {

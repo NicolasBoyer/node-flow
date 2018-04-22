@@ -1,13 +1,2 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-
-# dist - fichiers compilés
-dist
-
-# Dependency directory
-node_modules
-
 # Fichiers d'aide de programmation perso 
 _helpers

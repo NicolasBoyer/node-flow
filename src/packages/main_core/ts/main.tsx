@@ -1,9 +1,9 @@
 import Button from "button";
 import Canvas from "canvas";
-import { DatasMgr, EStorageKey } from "datas";
-import { INodeConfig, IPrefsConfig } from "dom";
-import { NFJSX } from "jsx";
+import { IPrefsConfig } from "interfaces";
+import { JSX } from "jsx";
 import Library from "library";
+import { DatasMgr, EStorageKey } from "store";
 import Window from "window";
 import WindowsManager from "windows-manager";
 
@@ -30,18 +30,18 @@ windowsManager.initEvents();
 
 // win.hide();
 // document.body.appendChild(win);
-const win2 = document.body.appendChild(<nf-window width="800" draggable="true" resizable="true" title="Other"><div>By default, if an element has shadow DOM, the shadow tree is rendered instead of the element's children. To allow children to render, you need to add placeholders for them in your shadow tree. To do this in shadow DOM v1:</div></nf-window>);
-const win = document.body.appendChild(<nf-window width="600" draggable="true" resizable="true" center="true" title="Configurer les nodes"><div>blirp</div></nf-window>);
+const win2 = document.body.appendChild(<ui-window width="800" draggable="true" resizable="true" title="Other"><div>By default, if an element has shadow DOM, the shadow tree is rendered instead of the element's children. To allow children to render, you need to add placeholders for them in your shadow tree. To do this in shadow DOM v1:</div></ui-window>);
+const win = document.body.appendChild(<ui-window width="600" draggable="true" resizable="true" center="true" title="Configurer les nodes"><div>blirp</div></ui-window>);
 // eventsManager.addWindow(win)
 // eventsManager.addWindow(win2)
 // win.draggable = true;
 // Sans doute revoir la mise en place des attributs
-// document.body.appendChild(<button style="position:absolute;bottom:0;" onclick={(ev: MouseEvent) => {win.resizable = true; win.visible = true; win.center = true;const test = document.body.appendChild(<nf-window width="600" center="true" draggable="true" title="Configurer les po"><div>blirp</div></nf-window>) as Window; console.log(test.id);eventsManager.addWindow(test) }}>blop</button>);
+// document.body.appendChild(<button style="position:absolute;bottom:0;" onclick={(ev: MouseEvent) => {win.resizable = true; win.visible = true; win.center = true;const test = document.body.appendChild(<ui-window width="600" center="true" draggable="true" title="Configurer les po"><div>blirp</div></ui-window>) as Window; console.log(test.id);eventsManager.addWindow(test) }}>blop</button>);
 
-const settings = document.body.appendChild(<nf-button title="Paramètres" type="maximize" class="maximize" style="position:absolute;top:0;font-size: xx-large;left: 1em;height: 1em;width: 1em;cursor: pointer;"></nf-button>);
+const settings = document.body.appendChild(<ui-button title="Paramètres" type="maximize" class="maximize" style="position:absolute;top:0;font-size: xx-large;left: 1em;height: 1em;width: 1em;cursor: pointer;"></ui-button>);
 
 settings.onclick = (ev: MouseEvent) => {
-    document.body.appendChild(<nf-window width="800" center="true" draggable="true" resizable="true" title="Autre"><div>Machin</div></nf-window>);
+    document.body.appendChild(<ui-window width="800" center="true" draggable="true" resizable="true" title="Autre"><div>Machin</div></ui-window>);
 };
 
 // document.onmousemove = (event: MouseEvent) => {

@@ -11,25 +11,32 @@
     "allowJs": false,
     "newLine": "LF",
     "jsx": "react",
-    "jsxFactory": "NFJSX.createElement",
+    "jsxFactory": "JSX.createElement",
     "sourceMap": true,
     "removeComments": true,
     "noEmitOnError": true,
     "strict": true,
     "noImplicitAny": true,
     "alwaysStrict": true,
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "strictPropertyInitialization": false,
     "paths": {
       "*": [
-        "ts/components/ui/*",
-        "ts/components/graph/*",
-        "ts/components/objects/*",
-        "ts/utils/*"
+        "../commons_core/ts/*",
+        "../graph_core/ts/*",
+        "../graph_store/ts/*",
+        "../ui_core/ts/manager/*",
+        "../ui_core/ts/widgets/*"
+      ],
+      "svg.js" : [
+        "node_modules/svg.js"
+      ],
+      "electron" : [
+        "node_modules/electron"
       ]
     }
   },
   "include":[
-    "src"
+    "../../"
   ]
 }

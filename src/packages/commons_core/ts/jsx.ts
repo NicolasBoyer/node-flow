@@ -41,14 +41,14 @@ class JSXServices {
         }
         // Append children
         for (const child of children) {
-            NFJSX.appendChildren(element, child);
+            JSX.appendChildren(element, child);
         }
         return element;
     }
 
     appendChildren(element: Element | DocumentFragment, children: any) {
         if (Array.isArray(children)) {
-            children.forEach((ch) => NFJSX.appendChildren(element, ch));
+            children.forEach((ch) => JSX.appendChildren(element, ch));
         } else if (children instanceof Node) {
             element.appendChild(children);
         } else {
@@ -57,4 +57,4 @@ class JSXServices {
     }
 }
 
-export const NFJSX: JSXServices = new JSXServices();
+export const JSX: JSXServices = new JSXServices();

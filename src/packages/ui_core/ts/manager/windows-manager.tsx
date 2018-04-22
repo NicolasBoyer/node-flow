@@ -1,5 +1,5 @@
 import { DOM } from "dom";
-import { NFJSX } from "jsx";
+import { JSX } from "jsx";
 import { IOnPosition } from "window";
 import Window from "window";
 
@@ -138,7 +138,7 @@ export default class WindowsManager {
         const dockedLeftWindows = this._getDockedWindows("left");
         dockedLeftWindows.forEach((windowInfos, window) => {
             if (position === "top" || position === "bottom") {
-                console.log(topDockedWindowHeight)
+                console.log(topDockedWindowHeight);
                 // Pos en top marche pas encore
                 const top = position === "top" && this._isGhostDocked ? this._windowSizeAfterDocked * (windowInfos.index + 1) : topDockedWindowHeight * windowInfos.index;
                 const height = position === "bottom" ? windowInfos.height - this._windowSizeAfterDocked : (windowSize.height - topDockedWindowHeight) / dockedLeftWindows.size;

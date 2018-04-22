@@ -79,15 +79,15 @@ var files = module.exports = {
 		if (fs.existsSync(dir)) fs.readdir(dir, callback);
 	},
 
-	getAllFiles : function(dir, filelist = {allFiles:[],tsFiles:[],importFiles:[],cssFiles:[],jsFiles:[],htmlFiles:[],imgFiles:[]}) {
+	getAllFiles : function(dir, excludes, filelist = {allFiles:[],tsFiles:[],importFiles:[],cssFiles:[],jsFiles:[],htmlFiles:[],imgFiles:[]}) {
 		fs.readdirSync(dir).forEach(file => {
-			if (fs.statSync(path.join(dir, file)).isDirectory()) filelist = files.getAllFiles(path.join(dir, file), filelist);
+			if (fs.statSync(path.join(dir, file)).isDirectory() && !excludes.includes(file)) filelist = files.getAllFiles(path.join(dir, file), excludes, filelist);
 			else {
-				filelist.allFiles = filelist.allFiles.concat(path.join(dir, file));
+				if (!excludes.includes(file)) filelist.allFiles = filelist.allFiles.concat(path.join(dir, file));
 				if (file.includes('.ts') || file.includes('.tsx')) filelist.tsFiles = filelist.tsFiles.concat(path.join(dir, file));
-				if ((file.includes('.ts') || file.includes('.tsx')) && !file.includes('main.tsx') && !file.includes('electron')) filelist.importFiles = filelist.importFiles.concat({'name':file.substring(0, file.lastIndexOf('.')),'path':path.join(dir, file)});
+				if ((file.includes('.ts') || file.includes('.tsx')) && !file.includes('main.tsx') && !file.includes('electron')) filelist.importFiles = filelist.importFiles.concat({'name':file !== "svg.js" ? file.substring(0, file.lastIndexOf('.')) : file,'path':path.join(dir, file)});
 				if (file.includes('.css')) filelist.cssFiles = filelist.cssFiles.concat(path.join(dir, file));
-				if (file.includes('.js')) filelist.jsFiles =  filelist.jsFiles.concat(path.join(dir, file));
+				if (file.includes('.js') && !excludes.includes(file)) filelist.jsFiles =  filelist.jsFiles.concat(path.join(dir, file));
 				if (file.includes('.html') || file.includes('.xhtml')) filelist.htmlFiles =  filelist.htmlFiles.concat(path.join(dir, file));
 				if (file.includes('.jpg') || file.includes('.png') || file.includes('.gif') || file.includes('.svg')) filelist.imgFiles =  filelist.imgFiles.concat(path.join(dir, file));
 			}			
