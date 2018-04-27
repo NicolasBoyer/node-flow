@@ -1,0 +1,4 @@
+[build]
+  base    = "src/packages/bootstrap_core"
+  publish = "public"
+  command = "npm run prod"
