@@ -105,7 +105,6 @@ var files = module.exports = {
 	copy(oldFile, newFile) {
 		return new Promise(function (resolve) {
 			if (fs.existsSync(oldFile)) {
-				fs.createFile(newFile)
 				var splitFile = newFile.split('\\');
 				splitFile.forEach((string, index) => {
 					if (!string.includes('.') && index != 0) files.createDir(newFile.substring(0, newFile.lastIndexOf(string + '\\')) + string);
