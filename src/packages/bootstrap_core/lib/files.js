@@ -109,6 +109,7 @@ var files = module.exports = {
 				splitFile.forEach((string, index) => {
 					if (!string.includes('.') && index != 0) files.createDir(newFile.substring(0, newFile.lastIndexOf(string + '\\')) + string);
 				});
+				files.createWriteStream(newFile);
 				fs.copy(oldFile, newFile, function (err) {
 					if (err) return console.error(err);
 					resolve();

@@ -74,7 +74,6 @@ init = function() {
 copyFiles = function() {
     return new Promise(function (resolve) {  
         if (filesToCopy.length) {
-            files.createWriteStream(outputDir + '/test.xhtml')
             filesToCopy.forEach((file, index) => {
                 files.watchFile(file, () => copyFile(file).then(() => {
                     if (isElectron) electron.reload();
