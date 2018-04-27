@@ -74,11 +74,13 @@ init = function() {
 copyFiles = function() {
     return new Promise(function (resolve) {  
         if (filesToCopy.length) {
+            files.createWriteStream(outputDir + '/test.xhtml')
             filesToCopy.forEach((file, index) => {
                 files.watchFile(file, () => copyFile(file).then(() => {
                     if (isElectron) electron.reload();
                     else if (!isProd)  browserSync.reload();
                 }));
+
                 copyFile(file).then(() => {
                     if (filesToCopy.length -1 === index) resolve()
                 });
@@ -142,7 +144,6 @@ bundle = function() {
         .pipe(files.createWriteStream(outFilePath));
     });  
 }
-
 
 // A suppr aussi sans doute
 startElectron = function() {
