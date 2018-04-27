@@ -1,6 +1,5 @@
 const fs = require('fs-extra');
 const path = require('path');
-const ncp = require('ncp').ncp;
 
 var files = module.exports = {
 	getCurrentDirectoryBase : function() {
