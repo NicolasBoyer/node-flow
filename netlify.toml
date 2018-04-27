@@ -1,4 +1,4 @@
 [build]
   base    = "src/packages/bootstrap_core"
-  publish = "dist"
+  publish = "src/packages/bootstrap_core/dist"
   command = "npm run prod"
