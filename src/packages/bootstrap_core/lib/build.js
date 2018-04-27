@@ -61,6 +61,7 @@ init = function() {
 
 
     transpile(!isProd, isProd).then(() => copyFiles().then(() => {
+        if (isProd) return;
         if (isElectron) {
             electron.start();
 
