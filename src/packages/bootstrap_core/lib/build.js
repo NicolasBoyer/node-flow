@@ -76,7 +76,7 @@ copyFiles = function() {
             filesToCopy.forEach((file) => {
                 files.watchFile(file, () => copyFile(file).then(() => {
                     if (isElectron) electron.reload();
-                    else browserSync.reload();
+                    else if (!isProd)  browserSync.reload();
                 }));
                 copyFile(file).then(() => resolve());
             });
@@ -130,7 +130,7 @@ bundle = function() {
             console.log("La transpilation s'est terminé avec succès.");
             resolve();
             if (isElectron) electron.reload();
-            else browserSync.reload();
+            else if (!isProd)  browserSync.reload();
         })
         .on('error', (error) => {
             if (error) throw new Error("La transpilation s'est arrêté - " + error.toString());
