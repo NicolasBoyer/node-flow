@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 const ncp = require('ncp').ncp;
 
@@ -110,7 +110,7 @@ var files = module.exports = {
 				splitFile.forEach((string, index) => {
 					if (!string.includes('.') && index != 0) files.createDir(newFile.substring(0, newFile.lastIndexOf(string + '\\')) + string);
 				});
-				ncp(oldFile, newFile, function (err) {
+				fs.copy(oldFile, newFile, function (err) {
 					if (err) return console.error(err);
 					resolve();
 				});

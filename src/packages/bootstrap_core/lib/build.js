@@ -67,18 +67,21 @@ init = function() {
             // A voir car ne se met pas à jour -> A retester
             // startElectron();
         } else if (!isProd) browserSync.init({server: "./" + outDirectoryName});
+        else process.exit();
     }));
 }
 
 copyFiles = function() {
     return new Promise(function (resolve) {  
         if (filesToCopy.length) {
-            filesToCopy.forEach((file) => {
+            filesToCopy.forEach((file, index) => {
                 files.watchFile(file, () => copyFile(file).then(() => {
                     if (isElectron) electron.reload();
                     else if (!isProd)  browserSync.reload();
                 }));
-                copyFile(file).then(() => resolve());
+                copyFile(file).then(() => {
+                    if (filesToCopy.length -1 === index) resolve()
+                });
             });
         } else resolve();
     });
