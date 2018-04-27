@@ -61,13 +61,12 @@ init = function() {
 
 
     transpile(!isProd, isProd).then(() => copyFiles().then(() => {
-        if (isProd) return;
         if (isElectron) {
             electron.start();
 
             // A voir car ne se met pas à jour -> A retester
             // startElectron();
-        } else browserSync.init({server: "./" + outDirectoryName});
+        } else if (!isProd) browserSync.init({server: "./" + outDirectoryName});
     }));
 }
 
