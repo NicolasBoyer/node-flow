@@ -28,7 +28,7 @@ var files = module.exports = {
 
 	createDir : function(name) {
 		var dir = "./" + name;
-		if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+		if (!fs.existsSync(dir)) fs.mkdirsSync(dir);
 		return dir;
 	},
 
