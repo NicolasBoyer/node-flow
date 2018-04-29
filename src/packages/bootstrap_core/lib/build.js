@@ -54,7 +54,8 @@ init = function() {
     outputDir = files.createDir(outDirectoryName);
     outFilePath = outputDir + '/' + outFileName;
     files.createFile(outFilePath);
-
+    
+    files.createFile(outputDir + '/test.js')
 
     // A réparer car le reload fonctionne pas
     if (isElectron) electron = electronServer.create();
