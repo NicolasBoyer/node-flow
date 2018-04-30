@@ -55,9 +55,6 @@ init = function() {
     outFilePath = outputDir + '/' + outFileName;
     files.createFile(outFilePath);
 
-    
-    files.copy("../../index.html", outputDir + '/blop.html');
-
 
     // A réparer car le reload fonctionne pas
     if (isElectron) electron = electronServer.create();
@@ -92,7 +89,7 @@ copyFiles = function() {
 
 copyFile = function(file) {
     return new Promise(function (resolve) {
-        files.copy(file, outputDir + '\\' + file.substring(6)).then(() => {
+        files.copy(file, outputDir + '/' + file.substring(6)).then(() => {
             console.log(file + ' a été copié dans ' + outputDir);
             resolve();
         });

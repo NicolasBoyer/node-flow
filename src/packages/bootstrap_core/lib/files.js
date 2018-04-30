@@ -105,10 +105,10 @@ var files = module.exports = {
 	copy(oldFile, newFile) {
 		return new Promise(function (resolve) {
 			if (fs.existsSync(oldFile)) {
-				var splitFile = newFile.split('\\');
-				splitFile.forEach((string, index) => {
-					if (!string.includes('.') && index != 0) files.createDir(newFile.substring(0, newFile.lastIndexOf(string + '\\')) + string);
-				});
+				// var splitFile = newFile.split('\\');
+				// splitFile.forEach((string, index) => {
+				// 	if (!string.includes('.') && index != 0) files.createDir(newFile.substring(0, newFile.lastIndexOf(string + '\\')) + string);
+				// });
 				fs.copy(oldFile, newFile, function (err) {
 					if (err) return console.error(err);
 					resolve();
