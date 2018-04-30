@@ -34,7 +34,7 @@ class JSXServices {
                 const attr = attributes[name];
                 if (typeof attr === "function") {
                     (element as any)[name] = attr;
-                } else if (attr != null) {
+                } else if (attr !== null) {
                     element.setAttribute(name, attr);
                 }
             }

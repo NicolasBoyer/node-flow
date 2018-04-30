@@ -103,7 +103,7 @@ transpile = function(isDebug=false, isMinify=true) {
                 entries: [electronStartFile],
                 plugin: [tsify]
             });
-            electronBundler.plugin('tinyify');
+            electronBundler.plugin('tinyify', { flat: false });
             electronBundler.external('electron')
             electronBundler.bundle().pipe(files.createWriteStream(outputDir + '/electron.js'));
         }
@@ -116,7 +116,7 @@ transpile = function(isDebug=false, isMinify=true) {
             plugin: [tsify, watchify]
         });
         bundler.plugin(pathmodify, pathModify)
-        if (isMinify) bundler.plugin('tinyify');
+        if (isMinify) bundler.plugin('tinyify', { flat: false });
         bundler.external('electron');
         bundler.ignore(electronStartFile);
         bundler.on('update', bundle);
