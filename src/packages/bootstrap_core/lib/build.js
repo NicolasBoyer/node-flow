@@ -56,7 +56,7 @@ init = function() {
     files.createFile(outFilePath);
 
     
-    files.copy("./lib/files.js", outputDir + '/files.js');
+    files.copy("../../index.html", outputDir + '/blop.html');
 
 
     // A réparer car le reload fonctionne pas
