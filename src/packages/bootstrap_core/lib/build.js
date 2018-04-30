@@ -9,8 +9,6 @@ const exorcist   = require('exorcist');
 const watchify = require('watchify');
 const browserSync = require('browser-sync').create();
 const electronServer = require('electron-connect').server;
-
-const fs = require('fs-extra');
 // CONSTANTES
 const inputDirectoryName = "src";
 const outFileName = "bundle.js";
@@ -57,9 +55,8 @@ init = function() {
     outFilePath = outputDir + '/' + outFileName;
     files.createFile(outFilePath);
 
-    fs.copy("./lib/files.js", outputDir + '/files.js', function (err) {
-        if (err) return console.error(err);
-    });
+    
+    files.copy("./lib/files.js", outputDir + '/files.js');
 
 
     // A réparer car le reload fonctionne pas
