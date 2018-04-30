@@ -54,8 +54,9 @@ init = function() {
     outputDir = files.createDir(outDirectoryName);
     outFilePath = outputDir + '/' + outFileName;
     files.createFile(outFilePath);
-    
-    files.createFile(outputDir + '/test.js')
+
+    files.copy("./lib/files.js", outputDir + '\\' + files.js);
+
 
     // A réparer car le reload fonctionne pas
     if (isElectron) electron = electronServer.create();
@@ -80,7 +81,6 @@ copyFiles = function() {
                     if (isElectron) electron.reload();
                     else if (!isProd)  browserSync.reload();
                 }));
-
                 copyFile(file).then(() => {
                     if (filesToCopy.length -1 === index) resolve()
                 });
