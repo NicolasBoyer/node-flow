@@ -1,0 +1,6 @@
+{
+    "srcPath": "../../",
+    "wwwPath": "../../www",
+    "distPath": "../../../dist",
+    "startFile": "app.tsx"
+}

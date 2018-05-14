@@ -1,2 +1,11 @@
 # Fichiers d'aide de programmation perso 
 _helpers
+
+# Fuse Box Cache
+.wag
+
+# dist - fichiers compilés
+dist
+
+#release electron
+releaseElectron
