@@ -1,6 +1,6 @@
+import { IPrefsConfig } from "interfaces";
+import { DatasMgr, EStorageKey } from "store";
 import * as SVG from "svg.js";
-import { IPrefsConfig } from "../../main_commons/ts/interfaces";
-import { DatasMgr, EStorageKey } from "../../main_commons/ts/store";
 
 export default class Canvas {
     readonly graph: SVG.Nested;

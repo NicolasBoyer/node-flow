@@ -4,7 +4,7 @@ interface INodeConfig {
     color: string;
 }
 
-import { DatasMgr, EStorageKey } from "../../main_commons/ts/store";
+import { DatasMgr, EStorageKey } from "store";
 
 export default class Library {
     readonly name: string;
