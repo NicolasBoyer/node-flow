@@ -3,13 +3,13 @@ import Canvas from "canvas";
 import { IPrefsConfig } from "interfaces";
 import { JSX } from "jsx";
 import Library from "library";
-import { DatasMgr, EStorageKey } from "store";
+// import { DatasMgr, EStorageKey } from "store";
 import Window from "window";
 import WindowsManager from "windows-manager";
 import "./www/styles/main.css";
 
 const prefs: IPrefsConfig = {canvasSize: 5000, backgroundColor: "#666", zoomIntensity: 0.3, zoomLevel: 1};
-new DatasMgr().save(EStorageKey.prefs, prefs);
+// new DatasMgr().save(EStorageKey.prefs, prefs);
 
 // A rendre paramétrable
 const scenariLib = new Library("scenari");
@@ -29,7 +29,7 @@ windowsManager.initEvents();
 // !!!! Rendu à créer un framewok pour créer des window pour faire la config des nodes ...
 // !!!!
 // tslint:disable-next-line:max-line-length
-// const win = document.body.appendChild(new Window({title: "Configurer les nodes", width: 600, height: 800, draggable: true, minWidth: 400, className: "blop"}));
+const win = document.body.appendChild(new Window({title: "Configurer les nodes", width: 600, height: 800, draggable: true, minWidth: 400, className: "blop"}));
 
 // win.hide();
 // document.body.appendChild(win);
