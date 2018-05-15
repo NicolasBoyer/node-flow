@@ -26,10 +26,11 @@ const tsconfig =  JSON.parse(files.readFileSync("./tsconfig.json", "utf8"));
 tsconfig.include.forEach((directory) => {
     let allFiles = files.getAllFiles(directory, [files.getCurrentDirectoryBase(), "tsconfig.json"]);
     allFiles.tsCommonFiles.forEach((file) => {
-        let fileName = file.substring(file.lastIndexOf("\\")+1);
+        let spacer = file.includes("\\") ? "\\" : "/";
+        let fileName = file.substring(file.lastIndexOf(spacer)+1);
         fileName = fileName.substring(0, fileName.lastIndexOf("."));
         console.log(file)
-        importFiles[fileName] = file.replace("..\\", "~/").split("\\").join("/").substring(0, file.lastIndexOf(".")-1);
+        importFiles[fileName] = file.replace(".." + spacer, "~/").split(spacer).join("/").substring(0, file.lastIndexOf(".")-1);
     });
 });
 // WAG CONFIG

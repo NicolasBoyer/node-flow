@@ -85,7 +85,7 @@ var files = module.exports = {
 				if (!excludes.includes(file)) filelist.allFiles = filelist.allFiles.concat(path.join(dir, file));
 				if ((file.includes('.ts') || file.includes('.tsx'))) filelist.tsCommonFiles = filelist.tsCommonFiles.concat(path.join(dir, file));
 				// if ((file.includes('.ts') || file.includes('.tsx')) && !file.includes('main_core')) filelist.tsCommonFiles = filelist.tsCommonFiles.concat(path.join(dir, file));
-				if ((file.includes('.ts') || file.includes('.tsx')) && file.includes('main_core/ts/pages')) filelist.tsPageFiles = filelist.tsPageFiles.concat(path.join(dir, file));
+				// if ((file.includes('.ts') || file.includes('.tsx')) && file.includes('main_core/ts/pages')) filelist.tsPageFiles = filelist.tsPageFiles.concat(path.join(dir, file));
 				if ((file.includes('.ts') || file.includes('.tsx')) && !file.includes('main_core')) filelist.importFiles = filelist.importFiles.concat({'name':file !== "svg.js" ? file.substring(0, file.lastIndexOf('.')) : file,'path':path.join(dir, file)});
 				if (file.includes('.css')) filelist.cssFiles = filelist.cssFiles.concat(path.join(dir, file));
 				if (file.includes('.js') && !excludes.includes(file)) filelist.jsFiles =  filelist.jsFiles.concat(path.join(dir, file));
