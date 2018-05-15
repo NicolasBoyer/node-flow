@@ -28,16 +28,14 @@ tsconfig.include.forEach((directory) => {
     allFiles.tsCommonFiles.forEach((file) => {
         let fileName = file.substring(file.lastIndexOf("\\")+1);
         fileName = fileName.substring(0, fileName.lastIndexOf("."));
+        console.log(file)
         importFiles[fileName] = file.replace("..\\", "~/").split("\\").join("/").substring(0, file.lastIndexOf(".")-1);
     });
 });
-console.log(importFiles)
-
 // WAG CONFIG
 // A utiliser sur node_modules
 // const wagconfig = JSON.parse(files.readFileSync(files.getCurrentDirectoryBase() + "/wag.json", "utf8"));
 const wagconfig = JSON.parse(files.readFileSync("./wag.json", "utf8"));
-console.log(wagconfig)
 
 context(class {
     getConfig() {
