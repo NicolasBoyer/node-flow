@@ -23,7 +23,6 @@ const isElectron = argv.electron;
 // PATH IMPORT ALIAS
 let importFiles = {};
 const tsconfig =  JSON.parse(files.readFileSync("./tsconfig.json", "utf8"));
-console.log(tsconfig)
 tsconfig.include.forEach((directory) => {
     let allFiles = files.getAllFiles(directory, [files.getCurrentDirectoryBase(), "tsconfig.json"]);
     allFiles.tsCommonFiles.forEach((file) => {
@@ -32,11 +31,13 @@ tsconfig.include.forEach((directory) => {
         importFiles[fileName] = file.replace("..\\", "~/").split("\\").join("/").substring(0, file.lastIndexOf(".")-1);
     });
 });
+console.log(importFiles)
 
 // WAG CONFIG
 // A utiliser sur node_modules
 // const wagconfig = JSON.parse(files.readFileSync(files.getCurrentDirectoryBase() + "/wag.json", "utf8"));
 const wagconfig = JSON.parse(files.readFileSync("./wag.json", "utf8"));
+console.log(wagconfig)
 
 context(class {
     getConfig() {
