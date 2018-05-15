@@ -29,7 +29,7 @@ windowsManager.initEvents();
 // !!!! Rendu à créer un framewok pour créer des window pour faire la config des nodes ...
 // !!!!
 // tslint:disable-next-line:max-line-length
-// const win = document.body.appendChild(new Window({title: "Configurer les nodes", width: 600, height: 800, draggable: true, minWidth: 400, className: "blop"}));
+const win = document.body.appendChild(new Window({title: "Configurer les nodes", width: 600, height: 800, draggable: true, minWidth: 400, className: "blop"}));
 
 // win.hide();
 // document.body.appendChild(win);
@@ -41,9 +41,9 @@ const win2 = document.body.appendChild(<ui-window width="800" draggable="true" r
 // Sans doute revoir la mise en place des attributs
 // document.body.appendChild(<button style="position:absolute;bottom:0;" onclick={(ev: MouseEvent) => {win.resizable = true; win.visible = true; win.center = true;const test = document.body.appendChild(<ui-window width="600" center="true" draggable="true" title="Configurer les po"><div>blirp</div></ui-window>) as Window; console.log(test.id);eventsManager.addWindow(test) }}>blop</button>);
 
-const settings = document.body.appendChild(<ui-button title="Paramètres" type="maximize" class="maximize" style="position:absolute;top:0;font-size: xx-large;left: 1em;height: 1em;width: 1em;cursor: pointer;"></ui-button>);
-// const settings = document.body.appendChild(new Button({title: "Paramètres", type: "maximize", className: "maximize"}));
-// settings.setAttribute("style", "position:absolute;top:0;font-size: xx-large;left: 1em;height: 1em;width: 1em;cursor: pointer;");
+// const settings = document.body.appendChild(<ui-button title="Paramètres" type="maximize" class="maximize" style="position:absolute;top:0;font-size: xx-large;left: 1em;height: 1em;width: 1em;cursor: pointer;"></ui-button>);
+const settings = document.body.appendChild(new Button({title: "Paramètres", type: "maximize", className: "maximize"}));
+settings.setAttribute("style", "position:absolute;top:0;font-size: xx-large;left: 1em;height: 1em;width: 1em;cursor: pointer;");
 
 settings.onclick = (ev: MouseEvent) => {
     document.body.appendChild(<ui-window width="800" center="true" draggable="true" resizable="true" title="Autre"><div>Machin</div></ui-window>);
