@@ -23,6 +23,7 @@ const isElectron = argv.electron;
 // PATH IMPORT ALIAS
 let importFiles = {};
 const tsconfig =  JSON.parse(files.readFileSync("./tsconfig.json", "utf8"));
+console.log(tsconfig)
 tsconfig.include.forEach((directory) => {
     let allFiles = files.getAllFiles(directory, [files.getCurrentDirectoryBase(), "tsconfig.json"]);
     allFiles.tsCommonFiles.forEach((file) => {
