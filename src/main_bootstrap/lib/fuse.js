@@ -62,13 +62,13 @@ context(class {
                     group: "bundle.css"
                 }),
                 !this.isElectronTask && CopyPlugin({ files: ["**/*.svg"] }),
-                // this.isProduction && QuantumPlugin({
-                //     bakeApiIntoBundle: this.isElectronTask ? "electron" : "bundle",
-                //     target : this.isElectronTask ? "server" : "browser",
-                //     uglify : true,
-                //     treeshake : true,
-                //     removeExportsInterop: false
-                // })
+                this.isProduction && QuantumPlugin({
+                    bakeApiIntoBundle: this.isElectronTask ? "electron" : "bundle",
+                    target : this.isElectronTask ? "server" : "browser",
+                    uglify : true,
+                    treeshake : true,
+                    removeExportsInterop: false
+                })
             ]
         });
     }
