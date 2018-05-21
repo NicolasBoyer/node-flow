@@ -7,14 +7,14 @@ export namespace DOM {
         svg.setAttribute("class", "icon icon-" + name);
         svg.setAttribute("aria-hidden", "true");
         const use = svg.appendChild(document.createElementNS("http://www.w3.org/2000/svg", "use"));
-        use.setAttribute("href", icons + "#icon-" + name);
+        use.setAttribute("href", "./" + icons + "#icon-" + name);
         return svg;
     }
 
     export function changeIcon(svg: SVGSVGElement, name: string): SVGSVGElement {
         svg.setAttribute("class", "icon icon-" + name);
         svg.setAttribute("aria-hidden", "true");
-        (svg.firstChild as SVGUseElement).setAttribute("href", "assets/img/icons.svg#icon-" + name);
+        (svg.firstChild as SVGUseElement).setAttribute("href", "./" + icons + "#icon-" + name);
         return svg;
     }
 

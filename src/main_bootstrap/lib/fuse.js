@@ -1,6 +1,6 @@
 // ENV
-// a remplir aussi via le wag.json mais vois comment faire
-process.env.FUSEBOX_TEMP_FOLDER = "../../.wag";
+// a remplir aussi via le wapiti.json mais vois comment faire
+process.env.FUSEBOX_TEMP_FOLDER = "../../.wapiti";
 
 // REQUIRE
 const { FuseBox, QuantumPlugin, CSSPlugin, WebIndexPlugin, CopyPlugin, EnvPlugin } = require("fuse-box");
@@ -9,7 +9,7 @@ const files = require("./files");
 const execute = require('child_process').exec;
 const builder = require("electron-builder")
 
-// lien comme pour app.tsx dans wag.json posé en rapport au project src -> à améliorer IMPORTANT !
+// lien comme pour app.tsx dans wapiti.json posé en rapport au project src -> à améliorer IMPORTANT !
 const electronStartFile = 'main_bootstrap/ts/electron.ts';
 
 // ARGS
@@ -19,12 +19,13 @@ const argv = require('yargs')
 
 // GLOBALS
 const isElectron = argv.electron;
+const directoryBase = process.cwd();
 
 // PATH IMPORT ALIAS
 let importFiles = {};
 const tsconfig =  JSON.parse(files.readFileSync("./tsconfig.json", "utf8"));
 tsconfig.include.forEach((directory) => {
-    let allFiles = files.getAllFiles(directory, [files.getCurrentDirectoryBase(), "tsconfig.json"]);
+    let allFiles = files.getAllFiles(directory, [directoryBase, "tsconfig.json"]);
     allFiles.tsCommonFiles.forEach((file) => {
         let spacer = file.includes("\\") ? "\\" : "/";
         let fileName = file.substring(file.lastIndexOf(spacer)+1);
@@ -32,19 +33,20 @@ tsconfig.include.forEach((directory) => {
         importFiles[fileName] = file.replace(".." + spacer, "~/").split(spacer).join("/").substring(0, file.lastIndexOf(".")-1);
     });
 });
-// WAG CONFIG
-// A utiliser sur node_modules
-// const wagconfig = JSON.parse(files.readFileSync(files.getCurrentDirectoryBase() + "/wag.json", "utf8"));
-const wagconfig = JSON.parse(files.readFileSync("./wag.json", "utf8"));
+
+// WAPITI CONFIG
+const wapiticonfig = JSON.parse(files.readFileSync(directoryBase + "/wapiti.json", "utf8"));
+
+// PACKAGE JSON
+const packageJson = JSON.parse(files.readFileSync(directoryBase + "/package.json", "utf8"));
 
 context(class {
     getConfig() {
         return FuseBox.init({
-            homeDir: wagconfig.srcPath,
-            output: wagconfig.distPath + "/$name.js",
+            homeDir: directoryBase  + "/" + wapiticonfig.srcPath,
+            output: directoryBase  + "/" + wapiticonfig.distPath + "/$name.js",
             tsConfig : "../tsconfig.json",
             target : this.isElectronTask ? "server" : "browser",
-            // a virer quand !this.isElectronTask ?
             sourceMaps: !this.isProduction,
             alias: importFiles,
             hash: this.isProduction && !isElectron,
@@ -55,7 +57,7 @@ context(class {
                 }),
                 !this.isElectronTask && WebIndexPlugin({
                     path: ".",
-                    template: wagconfig.wwwPath + "/index.html",
+                    template: directoryBase  + "/" + wapiticonfig.wwwPath + "/index.html",
                     appendBundles: true
                 }),
                 !this.isElectronTask && CSSPlugin({
@@ -64,7 +66,7 @@ context(class {
                 !this.isElectronTask && CopyPlugin({ files: ["**/*.svg"] }),
                 this.isProduction && QuantumPlugin({
                     bakeApiIntoBundle: this.isElectronTask ? "electron" : "bundle",
-                    target : this.isElectronTask ? "server" : "browser",
+                    target : this.isElectronTask ? "electron" : "browser",
                     uglify : true,
                     treeshake : true,
                     removeExportsInterop: false
@@ -73,7 +75,7 @@ context(class {
         });
     }
 
-    createBundle(fuse, bundleName = "bundle", startFile = wagconfig.startFile) {
+    createBundle(fuse, bundleName = "bundle", startFile = wapiticonfig.startFile) {
         const app = fuse.bundle(bundleName);
         if (!this.isProduction && !this.isElectronTask) {
             app.watch();
@@ -84,11 +86,11 @@ context(class {
     }
 });
 
-// tache electron, service worker, generate www + create ts file ? + autre script si néecessaire ... jsx à prendre en compte + fin reorg + wapit / wag / speedui / node-flow / wag-flow
+// tache electron, service worker, generate www + create ts file ? + autre script si néecessaire ... jsx à prendre en compte + fin reorg + wapit / wapiti / speedui / node-flow / wag
 
-task("clear:cache", () => src("../../../.wag/").clean("../../../.wag/").exec());
+task("clear:cache", () => src("../../../.wapiti/").clean("../../../.wapiti/").exec());
 
-task("clear:dist", () => src(wagconfig.distPath + "/").clean(wagconfig.distPath + "/").exec());
+task("clear:dist", () => src(directoryBase  + "/" + wapiticonfig.distPath + "/").clean(directoryBase + "/" + wapiticonfig.distPath + "/").exec());
 
 task("clean", ["clear:cache", "clear:dist"]);
 
@@ -110,12 +112,32 @@ task("electron", [process.env.NODE_ENV === "production" ? "prod" : "default"], a
     context.isElectronTask = true;
     const fuse = context.getConfig();
     context.createBundle(fuse, "electron", "[" + electronStartFile + "]");
-    if (process.env.NODE_ENV === "production" ) {
-        // lancer un build
-        await fuse.run();
+    if (process.env.NODE_ENV === "production" ) {        
+        await fuse.run().then(() => {
+            // launch electron build
+            files.copy(directoryBase + "/" + wapiticonfig.distPath, "dist");
+            // A améliorer en donnant le choix de la sortie (win linux mac)
+            builder.build({
+                config: {
+                    "copyright": packageJson.author,
+                    "productName": packageJson.name,
+                    "files": [
+                        "dist"
+                    ]
+                }
+            })
+            .then((result) => {
+                let spacer = result[1].includes("\\") ? "\\" : "/";
+                let fileName = result[1].substring(result[1].lastIndexOf(spacer)+1);
+                // App à renommer avec name_version_date_setup
+                // A faire pour dmg linux etc
+                files.copy(result[1], directoryBase + "/" + wapiticonfig.distPath + "/" + packageJson.name + "_" + packageJson.version + "_setup.exe").then(() => files.removeDir("dist"));
+            })
+            .catch((error) => console.log(error));
+        });
     } else {
         await fuse.run().then(() => {
-            // launch electron the app
+            // launch electron dev
             runCommand("electron ../../dist/electron.js");
         });
     }

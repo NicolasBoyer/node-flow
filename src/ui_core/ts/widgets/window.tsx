@@ -695,6 +695,15 @@ export default class Window extends HTMLElement {
     // Reste docking
     // poser un local storage UI pour se rappeler des fenetre ouverte etc et pouvoir les réouvrir
     // shadow dom et touch - besoin d'un util pour normaliser les events et gérer le touch
+    // passer le drag en startdrag
+
+    // nav -> pour gérer les routes nom/object ou html ...
+    // nav sera un component de ui par exemple navController ou navManager
+    // nav.load pour décharger les pages et charger la page
+    // nav.push
+    // nav.pop
+    // Gérer au niveau de ui-pages
+
 }
 
 customElements.define("ui-window", Window);

@@ -14,13 +14,6 @@
     "prod-electron": "cross-env NODE_ENV=production node ./lib/fuse.js electron --electron",
     "build-electron": "build"
   },
-  "build": {
-    "copyright": "Nicolas Boyer",
-    "productName": "wapiti",
-    "files": [
-      "dist"
-    ]
-  },
   "keywords": [
     "graph",
     "node",
@@ -30,10 +23,9 @@
   "author": "Nicolas Boyer",
   "license": "MIT",
   "devDependencies": {
-    "asar": "^0.14.3",
     "cross-env": "^5.1.5",
-    "electron": "^1.8.6",
-    "electron-builder": "^20.13.3",
+    "electron": "^1.8.7",
+    "electron-builder": "^20.13.4",
     "fs-extra": "^5.0.0",
     "fuse-box": "^3.2.2",
     "svg.js": "^2.6.4",

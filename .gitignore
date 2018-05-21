@@ -2,7 +2,7 @@
 _helpers
 
 # Fuse Box Cache
-.wag
+.wapiti
 
 # dist - fichiers compilés
 dist

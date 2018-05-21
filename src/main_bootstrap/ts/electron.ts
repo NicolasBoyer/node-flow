@@ -22,13 +22,11 @@ function createWindow() {
       // Open the DevTools.
       win.webContents.openDevTools();
     } else {
-      // A améliorer chemin vers dist
       win.loadURL(url.format({
-        pathname: path.join(__dirname, "index.html"),
+        pathname: path.join(app.getAppPath(), "dist", `index.html`),
         protocol: "file:",
         slashes: true,
       }));
-      win.webContents.openDevTools();
     }
     win.on("closed", () => win = null);
 }
