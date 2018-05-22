@@ -3,5 +3,5 @@
     "wwwPath": "../www",
     "distPath": "../../dist",
     "startFile": "app.tsx",
-    "cacheFolder": "../../.wapiti"
+    "electronStartFile": "electronStart.ts"
 }

@@ -1,6 +1,6 @@
+const directoryBase = process.cwd();
 // ENV
-// a remplir aussi via le wapiti.json mais vois comment faire
-process.env.FUSEBOX_TEMP_FOLDER = "../../.wapiti";
+process.env.FUSEBOX_TEMP_FOLDER = directoryBase + "/.wapiti";
 
 // REQUIRE
 const { FuseBox, QuantumPlugin, CSSPlugin, WebIndexPlugin, CopyPlugin, EnvPlugin } = require("fuse-box");
@@ -9,9 +9,6 @@ const files = require("./files");
 const execute = require('child_process').exec;
 const builder = require("electron-builder")
 
-// lien comme pour app.tsx dans wapiti.json posé en rapport au project src -> à améliorer IMPORTANT !
-const electronStartFile = 'main_bootstrap/ts/electron.ts';
-
 // ARGS
 const argv = require('yargs')
 .option( "electron", { describe: "Utiliser electron", type: "boolean", default:false } )
@@ -19,11 +16,11 @@ const argv = require('yargs')
 
 // GLOBALS
 const isElectron = argv.electron;
-const directoryBase = process.cwd();
+const tsconfigFile = directoryBase + "/tsconfig.json";
 
 // PATH IMPORT ALIAS
 let importFiles = {};
-const tsconfig =  JSON.parse(files.readFileSync("./tsconfig.json", "utf8"));
+const tsconfig =  JSON.parse(files.readFileSync(tsconfigFile, "utf8"));
 tsconfig.include.forEach((directory) => {
     let allFiles = files.getAllFiles(directory, [files.getCurrentDirectoryBase(), "tsconfig.json"]);
     allFiles.tsCommonFiles.forEach((file) => {
@@ -35,7 +32,7 @@ tsconfig.include.forEach((directory) => {
 });
 
 // WAPITI CONFIG
-const wapiticonfig = JSON.parse(files.readFileSync(directoryBase + "/wapiti.json", "utf8"));
+const wapitiConfig = JSON.parse(files.readFileSync(directoryBase + "/wapiti.json", "utf8"));
 
 // PACKAGE JSON
 const packageJson = JSON.parse(files.readFileSync(directoryBase + "/package.json", "utf8"));
@@ -43,11 +40,11 @@ const packageJson = JSON.parse(files.readFileSync(directoryBase + "/package.json
 context(class {
     getConfig() {
         return FuseBox.init({
-            homeDir: directoryBase  + "/" + wapiticonfig.srcPath,
-            output: directoryBase  + "/" + wapiticonfig.distPath + "/$name.js",
-            tsConfig : "../tsconfig.json",
+            homeDir: directoryBase  + "/" + wapitiConfig.srcPath,
+            output: directoryBase  + "/" + wapitiConfig.distPath + "/$name.js",
+            tsConfig : tsconfigFile,
             target : this.isElectronTask ? "server" : "browser",
-            sourceMaps: !this.isProduction,
+            sourceMaps: !this.isProduction && !this.isElectronTask,
             alias: importFiles,
             hash: this.isProduction && !isElectron,
             cache: !this.isProduction,
@@ -57,7 +54,7 @@ context(class {
                 }),
                 !this.isElectronTask && WebIndexPlugin({
                     path: ".",
-                    template: directoryBase  + "/" + wapiticonfig.wwwPath + "/index.html",
+                    template: directoryBase  + "/" + wapitiConfig.wwwPath + "/index.html",
                     appendBundles: true
                 }),
                 !this.isElectronTask && CSSPlugin({
@@ -75,7 +72,7 @@ context(class {
         });
     }
 
-    createBundle(fuse, bundleName = "bundle", startFile = wapiticonfig.startFile) {
+    createBundle(fuse, bundleName = "bundle", startFile = wapitiConfig.startFile) {
         const app = fuse.bundle(bundleName);
         if (!this.isProduction && !this.isElectronTask) {
             app.watch();
@@ -86,11 +83,9 @@ context(class {
     }
 });
 
-// tache electron, service worker, generate www + create ts file ? + autre script si néecessaire ... jsx à prendre en compte + fin reorg + wapit / wapiti / speedui / node-flow / wag
+task("clear:cache", () => src(directoryBase + "/.wapiti/").clean(directoryBase + "/.wapiti/").exec());
 
-task("clear:cache", () => src("../../../.wapiti/").clean("../../../.wapiti/").exec());
-
-task("clear:dist", () => src(directoryBase  + "/" + wapiticonfig.distPath + "/").clean(directoryBase + "/" + wapiticonfig.distPath + "/").exec());
+task("clear:dist", () => src(directoryBase  + "/" + wapitiConfig.distPath + "/").clean(directoryBase + "/" + wapitiConfig.distPath + "/").exec());
 
 task("clean", ["clear:cache", "clear:dist"]);
 
@@ -111,34 +106,56 @@ task("prod", ["clean"], async context => {
 task("electron", [process.env.NODE_ENV === "production" ? "prod" : "default"], async context => {
     context.isElectronTask = true;
     const fuse = context.getConfig();
-    context.createBundle(fuse, "electron", "[" + electronStartFile + "]");
+    context.createBundle(fuse, "electron", "[" + wapitiConfig.electronStartFile + "]");
     if (process.env.NODE_ENV === "production" ) {        
         await fuse.run().then(() => {
             // launch electron build
-            files.copy(directoryBase + "/" + wapiticonfig.distPath, "dist");
-            // A améliorer en donnant le choix de la sortie (win linux mac)
+            files.copy(directoryBase + "/" + wapitiConfig.distPath, "dist");
             builder.build({
                 config: {
                     "copyright": packageJson.author,
                     "productName": packageJson.name,
                     "files": [
                         "dist"
-                    ]
+                    ],
+                    "dmg": {
+                        "contents": [
+                            {
+                                "x": 130,
+                                "y": 220
+                            },
+                            {
+                                "x": 410,
+                                "y": 220,
+                                "type": "link",
+                                "path": "/Applications"
+                            }
+                        ]
+                    },
+                    "win": {
+                        "target": [
+                            "nsis"
+                        ]
+                    },
+                    "linux": {
+                        "target": [
+                            "deb",
+                            "AppImage"
+                        ]
+                    }
                 }
             })
             .then((result) => {
                 let spacer = result[1].includes("\\") ? "\\" : "/";
                 let fileName = result[1].substring(result[1].lastIndexOf(spacer)+1);
-                // App à renommer avec name_version_date_setup
-                // A faire pour dmg linux etc
-                files.copy(result[1], directoryBase + "/" + wapiticonfig.distPath + "/" + packageJson.name + "_" + packageJson.version + "_setup.exe").then(() => files.removeDir("dist"));
+                files.copy(result[1], directoryBase + "/" + wapitiConfig.distPath + "/" + packageJson.name + "_" + packageJson.version + "_" + formatDateToYYYYMMDDHHMM(new Date()) + "_setup" + fileName.substring(fileName.lastIndexOf("."))).then(() => files.removeDir("dist"));
             })
             .catch((error) => console.log(error));
         });
     } else {
         await fuse.run().then(() => {
             // launch electron dev
-            runCommand("electron ../../dist/electron.js");
+            runCommand("electron " + directoryBase + "/" + wapitiConfig.distPath + "/electron.js");
         });
     }
 });
@@ -149,4 +166,12 @@ runCommand = function(cmd, callback, cwd, isOutput) {
     command.stdout.on('data', function (data) {
         if (isOutput) console.log(data);
     });
+}
+
+formatDateToYYYYMMDDHHMM = function(date) {
+    function pad2(n) {  // always returns a string
+        return (n < 10 ? '0' : '') + n;
+    }
+    // return date.getFullYear() + pad2(date.getMonth() + 1) + pad2(date.getDate()) + pad2(date.getHours()) + pad2(date.getMinutes()) + pad2(date.getSeconds());
+    return date.getFullYear() + pad2(date.getMonth() + 1) + pad2(date.getDate()) + pad2(date.getHours()) + pad2(date.getMinutes());
 }

@@ -12,7 +12,7 @@
     "dev-electron": "node ./lib/fuse.js electron --electron",
     "prod": "cross-env NODE_ENV=production node ./lib/fuse.js prod",
     "prod-electron": "cross-env NODE_ENV=production node ./lib/fuse.js electron --electron",
-    "build-electron": "build"
+    "clear": "node ./lib/fuse.js clean"
   },
   "keywords": [
     "graph",

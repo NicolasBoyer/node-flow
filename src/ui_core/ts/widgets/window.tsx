@@ -704,6 +704,8 @@ export default class Window extends HTMLElement {
     // nav.pop
     // Gérer au niveau de ui-pages
 
+    // tache electron, service worker, generate www + create ts file ? + autre script si néecessaire ... jsx à prendre en compte + fin reorg + wapit / wapiti / speedui / node-flow / wag + generate wapiti.json ou - wapiti init, dev, prod - electron.ts à peut etre ressortir + pb du tsconfig + custom.d.ts à ressortir aussi + build à suppr
+
 }
 
 customElements.define("ui-window", Window);
