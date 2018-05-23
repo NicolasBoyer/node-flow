@@ -160,15 +160,15 @@ task("electron", [process.env.NODE_ENV === "production" ? "prod" : "default"], a
     }
 });
 
-runCommand = function(cmd, callback, cwd, isOutput) {
-    var folderExec = cwd || null;
-    var command = execute(cmd, {cwd: folderExec}, callback);
-    command.stdout.on('data', function (data) {
-        if (isOutput) console.log(data);
-    });
+runCommand = (cmd, callback, cwd, isOutput) => {
+    const folderExec = cwd || null;
+    execute(cmd, {cwd: folderExec}, (error, stdout, stderr) => {
+		console.log(stdout);
+		console.log(stderr);
+	});
 }
 
-formatDateToYYYYMMDDHHMM = function(date) {
+formatDateToYYYYMMDDHHMM = (date) => {
     function pad2(n) {  // always returns a string
         return (n < 10 ? '0' : '') + n;
     }
