@@ -2,11 +2,11 @@ const fs = require('fs-extra');
 const path = require('path');
 
 var files = module.exports = {
-	getCurrentDirectoryBase : function() {
+	getCurrentDirectoryBase : () => {
 		return path.basename(process.cwd());
 	},
 
-	directoryExists : function(filePath) {
+	directoryExists : (filePath) => {
 		try {
 			return fs.statSync(filePath).isDirectory();
 		} catch (err) {
@@ -14,7 +14,7 @@ var files = module.exports = {
 		}
 	},
 
-	fileExists : function(filePath) {
+	fileExists : (filePath) => {
 		try {
 			return fs.existsSync(filePath);
 		} catch (err) {
@@ -22,30 +22,30 @@ var files = module.exports = {
 		}
 	},
 
-	getFileInCurrentContext : function(filePath) {
+	getFileInCurrentContext : (filePath) => {
 		return path.resolve(__dirname, filePath);
 	},
 
-	createDir : function(name) {
+	createDir : (name) => {
 		var dir = "./" + name;
 		if (!fs.existsSync(dir)) fs.mkdirsSync(dir);
 		return dir;
 	},
 
-	createFile : function(filePath) {
+	createFile : (filePath) => {
 		return fs.openSync(filePath, 'w');
 	},
 
-	appendFile : function(file, text) {
-		fs.appendFile(file, text, function(err) {
+	appendFile : (file, text) => {
+		fs.appendFile(file, text, (err) => {
 			if(err) return console.log(err);
 		}); 
 	},
 
-	removeDir : function(name) {
+	removeDir : (name) => {
 		var dir = "./" + name;
 		if (fs.existsSync(dir)) {
-			fs.readdirSync(dir).forEach(function(file, index) {
+			fs.readdirSync(dir).forEach((file, index) => {
 				var curPath = dir + "/" + file;
 				if (fs.lstatSync(curPath).isDirectory()) files.removeDir(curPath);
 				else fs.unlinkSync(curPath);
@@ -54,31 +54,31 @@ var files = module.exports = {
 		}
 	},
 
-	removeFile : function(name) {
+	removeFile : (name) => {
 		var pathName = "./" + name;
 		if (fs.existsSync(pathName)) fs.unlinkSync(pathName);
 	},
 
-	remove : function(name) {
+	remove : (name) => {
 		var pathName = "./" + name;
 		if (fs.existsSync(pathName) && fs.lstatSync(pathName).isDirectory()) files.removeDir(pathName);
 		else files.removeFile(pathName);
 	},
 
-	readFile : function(filePath, callback) {
+	readFile : (filePath, callback) => {
 		if (fs.existsSync(filePath)) fs.readFile(filePath, 'utf8', callback);
 	},
 
-	readFileSync : function(filePath) {
+	readFileSync : (filePath) => {
 		if (fs.existsSync(filePath)) return fs.readFileSync(filePath, 'utf8');
 	},
 
-	readDir : function(name, callback) {
+	readDir : (name, callback) => {
 		var dir = "./" + name;
 		if (fs.existsSync(dir)) fs.readdir(dir, callback);
 	},
 
-	getAllFiles : function(dir, excludes, filelist = {allFiles:[],tsCommonFiles:[],tsPageFiles:[],importFiles:[],cssFiles:[],jsFiles:[],htmlFiles:[],imgFiles:[]}) {
+	getAllFiles : (dir, excludes, filelist = {allFiles:[],tsCommonFiles:[],tsPageFiles:[],importFiles:[],cssFiles:[],jsFiles:[],htmlFiles:[],imgFiles:[]}) => {
 		fs.readdirSync(dir).forEach(file => {
 			if (fs.statSync(path.join(dir, file)).isDirectory() && !excludes.includes(file)) filelist = files.getAllFiles(path.join(dir, file), excludes, filelist);
 			else {
@@ -96,18 +96,18 @@ var files = module.exports = {
 		return filelist;
 	},
 
-	writeFile : function(filePath, message, callback) {
+	writeFile : (filePath, message, callback) => {
 		if (fs.existsSync(filePath)) fs.writeFile(filePath, message, callback);
 	},
 
-	createWriteStream : function(filePath) {
+	createWriteStream : (filePath) => {
 		return fs.createWriteStream(filePath);
 	},
 
-	copy(oldFile, newFile) {
-		return new Promise(function (resolve) {
+	copy : (oldFile, newFile) => {
+		return new Promise((resolve) => {
 			if (fs.existsSync(oldFile)) {
-				fs.copy(oldFile, newFile, function (err) {
+				fs.copy(oldFile, newFile, (err) => {
 					if (err) return console.error(err);
 					resolve();
 				});
@@ -115,7 +115,7 @@ var files = module.exports = {
 		});		
 	},
 
-	watchFile(filePath, cb) {
+	watchFile : (filePath, cb) => {
 		fs.watchFile(filePath, (curr, prev) => cb());	
 	}
 };
