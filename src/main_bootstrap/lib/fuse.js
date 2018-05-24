@@ -15,7 +15,7 @@ const argv = require('yargs')
 .argv;
 
 // GLOBALS
-const isElectron = argv.electron;
+const isElectron = process.argv[2] === "electron";
 const tsconfigFile = directoryBase + "/tsconfig.json";
 
 // PATH IMPORT ALIAS

@@ -31,8 +31,7 @@
     "svg.js": "^2.6.4",
     "tslint": "^5.10.0",
     "typescript": "^2.8.3",
-    "uglify-es": "^3.3.10",
-    "yargs": "^11.1.0"
+    "uglify-es": "^3.3.10"
   },
   "dependencies": {}
 }
