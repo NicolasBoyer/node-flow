@@ -7,12 +7,7 @@ const { FuseBox, QuantumPlugin, CSSPlugin, WebIndexPlugin, CopyPlugin, EnvPlugin
 const { src, task, exec, context } = require("fuse-box/sparky");
 const files = require("./files");
 const execute = require('child_process').exec;
-const builder = require("electron-builder")
-
-// ARGS
-const argv = require('yargs')
-.option( "electron", { describe: "Utiliser electron", type: "boolean", default:false } )
-.argv;
+const builder = require("electron-builder");
 
 // GLOBALS
 const isElectron = process.argv[2] === "electron";
