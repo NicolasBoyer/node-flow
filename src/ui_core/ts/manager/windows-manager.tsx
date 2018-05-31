@@ -1,5 +1,5 @@
-import { DOM } from "dom";
-import { JSX } from "jsx";
+import { DOM, JSX } from "wapitis";
+// import { JSX } from "jsx";
 import { IOnPosition } from "window";
 import Window from "window";
 

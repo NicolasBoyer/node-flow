@@ -1,0 +1,25 @@
+{
+  "name": "node-flow",
+  "version": "0.0.2",
+  "description": "Créateur de graph. Configurateur de graph. Graph générant du code ...",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NicolasBoyer/node-flow.git"
+  },
+  "keywords": [
+    "graph",
+    "node",
+    "flow",
+    "config"
+  ],
+  "author": "Nicolas Boyer",
+  "license": "MIT",
+  "devDependencies": {
+    "svg.js": "^2.6.5",
+    "tslint": "^5.10.0",
+    "typescript": "^2.8.4",
+    "wapitis": "0.0.26"
+  },
+  "dependencies": {},
+  "main": "src/../dist/electron.js"
+}

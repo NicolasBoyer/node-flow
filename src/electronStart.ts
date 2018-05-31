@@ -7,14 +7,7 @@ const DEBUG = ENV === "development";
 let win: any;
 
 function createWindow() {
-    win = new BrowserWindow({
-        // darkTheme : true,
-        // height: 600,
-        // webPreferences: {
-        //     devTools: DEBUG,
-        // },
-        // width: 800,
-    });
+    win = new BrowserWindow();
     win.maximize();
 
     if (DEBUG) {

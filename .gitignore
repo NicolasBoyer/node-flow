@@ -1,11 +1,16 @@
 # Fichiers d'aide de programmation perso 
 _helpers
 
-# Fuse Box Cache
-.wapiti
-
 # dist - fichiers compilés
 dist
 
-#release electron
-releaseElectron
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Dependency directory
+node_modules
+
+# cache wapiti
+.wapitis

@@ -1,5 +1,4 @@
-import { DOM } from "dom";
-import { JSX } from "jsx";
+import { DOM, JSX } from "wapitis";
 
 interface IButtonOpts {
     title?: string;

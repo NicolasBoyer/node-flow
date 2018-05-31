@@ -1,9 +1,9 @@
 import Button from "button";
 import Canvas from "canvas";
 import { IPrefsConfig } from "interfaces";
-import { JSX } from "jsx";
 import Library from "library";
 import { DatasMgr, EStorageKey } from "store";
+import { JSX } from "wapitis";
 import Window from "window";
 import WindowsManager from "windows-manager";
 import "./www/styles/main.css";

@@ -1,7 +1,0 @@
-{
-    "srcPath": "../",
-    "wwwPath": "../www",
-    "distPath": "../../dist",
-    "startFile": "app.tsx",
-    "electronStartFile": "electronStart.ts"
-}

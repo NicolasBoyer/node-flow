@@ -25,11 +25,11 @@
     "strictPropertyInitialization": false,
     "paths": {
       "*": [
-        "../graph_core/ts/*",
-        "../graph_store/ts/*",
-        "../main_commons/ts/*",
-        "../ui_core/ts/manager/*",
-        "../ui_core/ts/widgets/*"
+        "src/graph_core/ts/*",
+        "src/graph_store/ts/*",
+        "src/graph_commons/ts/*",
+        "src/ui_core/ts/manager/*",
+        "src/ui_core/ts/widgets/*"
       ],
       "svg.js" : [
         "node_modules/svg.js"
@@ -38,8 +38,5 @@
         "node_modules/electron"
       ]
     }
-  },
-  "include":[
-    "../"
-  ]
+  }
 }

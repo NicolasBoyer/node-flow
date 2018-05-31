@@ -1,6 +1,5 @@
 import Button from "button";
-import { DOM } from "dom";
-import { JSX } from "jsx";
+import { DOM, JSX } from "wapitis";
 
 interface IWindowOpts {
     [key: string]: any;
