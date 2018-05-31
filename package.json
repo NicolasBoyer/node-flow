@@ -1,6 +1,6 @@
 {
   "name": "node-flow",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Créateur de graph. Configurateur de graph. Graph générant du code ...",
   "repository": {
     "type": "git",
@@ -18,7 +18,7 @@
     "svg.js": "^2.6.5",
     "tslint": "^5.10.0",
     "typescript": "^2.8.4",
-    "wapitis": "0.0.29"
+    "wapitis": "~0.0.32"
   },
   "dependencies": {},
   "main": "src/../dist/electron.js"

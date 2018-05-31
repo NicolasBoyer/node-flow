@@ -273,19 +273,19 @@ export default class Window extends HTMLElement {
         this._titleElement = this._container.appendChild(<div class="title"><span>{this.title}</span></div>);
         this._content = this._container.appendChild(<div class="content"><slot></slot></div>);
         if (this._isMaximizedButton) {
-            this._minimizeButton = <ui-button title="Réduire" type="minimize" class="minimize" onclick={() => this.minimize()}></ui-button>;
+            this._minimizeButton = <Button title="Réduire" type="minimize" class="minimize" onclick={() => this.minimize()}></Button>;
             this._titleElement.appendChild(this._minimizeButton);
         }
         if (this._isMinimizedButton) {
-            this._maximizeButton = <ui-button title="Agrandir" type="maximize" class="maximize" onclick={() => this.maximize()}></ui-button>;
+            this._maximizeButton = <Button title="Agrandir" type="maximize" class="maximize" onclick={() => this.maximize()}></Button>;
             this._titleElement.appendChild(this._maximizeButton);
         }
         if (this._isClosedButton) {
-            const closeButton = <ui-button title="Fermer" type="close" class="close" onclick={() => {
+            const closeButton = <Button title="Fermer" type="close" class="close" onclick={() => {
                 this.classList.add("animate");
                 this.classList.add("fadeout");
                 setTimeout(() => this.destroy(), 200);
-            }}></ui-button>;
+            }}></Button>;
             this._titleElement.appendChild(closeButton);
         }
         this._icon = DOM.addIcon("folder_close", this._titleElement, this._titleElement.firstChild);
