@@ -1,7 +1,15 @@
 /* :root {
     --window-bg-color: #fff;
 } */
+/* @font-face {
+    font-family: MyWebFont;
+    src: url('../assets/fonts/WindowMarkers.ttf')  format('truetype')
+         /*url('webfont.woff2') format('woff2'), /* Super Modern Browsers */
+         /*url('webfont.woff') format('woff'), /* Pretty Modern Browsers */
+         /*url('webfont.ttf')  format('truetype'), /* Safari, Android, iOS 
+} */
 body {
+    /* font-family: MyWebFont; */
     overflow:hidden;
     margin:0;
     font-family: Arial, Helvetica, sans-serif;
