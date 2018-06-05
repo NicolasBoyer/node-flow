@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="Description" content="Créateur de graph. Configurateur de graph. Graph générant du code ...">
-    <title>node-flow</title>
-</head>
-<body>
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
-        }
-    </script>
-    <noscript style="border: 1px solid;padding: 1em;margin: 2em auto;display: block;text-align: center;width: 65%;font-size: large;">
-        Javascript est necessaire pour utiliser cette application. Merci de l'activer et de recharger la page !
-    </noscript>
-</body>
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+        <meta name="Description" content="Créateur de graph. Configurateur de graph. Graph générant du code ..."> 
+        <meta name="theme-color" content="#317EFB"/>
+        <link rel="manifest" href="/manifest.json"/>
+        <title>node-flow</title> 
+    </head>
+    <body>
+        <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
+            }
+        </script>
+        <noscript style="border: 1px solid;padding: 1em;margin: 2em auto;display: block;text-align: center;width: 65%;font-size: large;">
+            Javascript est necessaire pour utiliser cette application. Merci de l'activer et de recharger la page !
+        </noscript>
+    </body>
 </html>
