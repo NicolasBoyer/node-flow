@@ -21,6 +21,7 @@
     "strict": true,
     "noImplicitAny": true,
     "alwaysStrict": true,
+    "experimentalDecorators": true,
     "baseUrl": ".",
     "strictPropertyInitialization": false,
     "paths": {
@@ -31,10 +32,10 @@
         "src/ui_core/ts/manager/*",
         "src/ui_core/ts/widgets/*"
       ],
-      "svg.js" : [
+      "svg.js": [
         "node_modules/svg.js"
       ],
-      "electron" : [
+      "electron": [
         "node_modules/electron"
       ]
     }

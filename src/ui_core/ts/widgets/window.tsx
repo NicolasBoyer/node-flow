@@ -1,5 +1,5 @@
 import Button from "button";
-import { DOM, JSX } from "wapitis";
+import { Component, DOM, JSX } from "wapitis";
 
 interface IWindowOpts {
     [key: string]: any;
@@ -26,15 +26,18 @@ export interface IOnPosition {
     right?: boolean;
 }
 
-export default class Window extends HTMLElement {
+@Component.register("ui-window")
+
+export default class Window extends Component {
     // is docked left right top bottom
     // style
-    [key: string]: any;
 
     isDocked: boolean = false;
     dockedPosition: string = "";
 
     // A revoir peut etre avec les slots
+
+    // A VIRER CAR ON FAIT CA EN APPENDCHILD //
     protected _content: HTMLElement;
     get content(): HTMLElement {
         return this._content;
@@ -42,6 +45,8 @@ export default class Window extends HTMLElement {
     set content(content: HTMLElement) {
         this._content.appendChild(content);
     }
+    ///////
+
     get left(): number {
         return Number(this.getAttribute("left"));
     }
@@ -129,17 +134,6 @@ export default class Window extends HTMLElement {
         DOM.setAttribute(this, "margins", String(margins));
     }
     protected _isOnEdge: IOnPosition = {top: false, bottom: false, left: false, right: false};
-    protected _defaultAttributes: Array<{name: string, value: any, executeAtLast?: boolean}> = [
-        {name: "width", value: 800},
-        {name: "height", value: 600},
-        {name: "min-width", value: 200},
-        {name: "min-height", value: 200},
-        {name: "top", value: 0},
-        {name: "left", value: 0},
-        {name: "visible", value: true},
-        {name: "margins", value: 10},
-        {name: "center", value: false, executeAtLast: true},
-    ];
     protected _isMaximizedButton: boolean = true;
     protected _isMinimizedButton: boolean = true;
     protected _isClosedButton: boolean = true;
@@ -159,135 +153,154 @@ export default class Window extends HTMLElement {
     protected _sizeInfos: IWindowOpts;
     protected _maximizeButton: JSX.Element;
     protected _minimizeButton: JSX.Element;
-    protected _style: any;
     protected _icon: SVGSVGElement;
     // private _isGhostDocked: IOnPosition = {top: false, bottom: false, left: false, right: false};
 
     constructor(options?: IWindowOpts) {
         super();
-        const shadow = this.attachShadow({mode: "open"});
         // gestion touch
+        this._defaultAttributes = [
+            {name: "width", value: 800},
+            {name: "height", value: 600},
+            {name: "min-width", value: 200},
+            {name: "min-height", value: 200},
+            {name: "top", value: 0},
+            {name: "left", value: 0},
+            {name: "visible", value: true},
+            {name: "margins", value: 10},
+            {name: "center", value: false, executeAtLast: true},
+        ];
         if (options) {
             this._options = options;
             if (options.title) {
                 this.title = options.title;
             }
         }
-        this._style = shadow.appendChild(<style></style>);
-        this._bbox = shadow.appendChild(<div class="bbox"></div>);
-        this._container = shadow.appendChild(<div class="container"></div>);
+        this.id = DOM.generateId();
+    }
+
+    _style() {
+        return `
+        :host {
+            position: absolute;
+        }
+        .container {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+        }
+        .title {
+            cursor: default;
+            user-select: none;
+            /* border-bottom: 1px solid #d9d9d9; */
+            color: var(--font-color, #282828);
+            font-size: var(--font-size, 0.75em);
+            // padding: var(--title-padding, 0.3em);
+            text-align: var(--title-align, center);
+            min-height: var(--min-height, 1.2em);
+            display: flex;
+            align-items: center;
+        }
+        .title > span::before {
+            content: "|";
+            padding-right: 0.5em;
+        }
+        .title > span {
+            flex: 1 0 auto;
+            text-align: left;
+            padding-left: 0.6em;
+        }
+        .title ui-button {
+            flex: 0 1 auto;
+            align-self: auto;
+            min-width: 48px;
+            min-height: 37px;
+        }
+        .bbox {
+            position: absolute;
+        }
+        ui-button {
+            background: none;
+            color: #282828;
+            border: none;
+            font-size: x-large;
+            padding: 0;
+        }
+        ui-button span {
+            display: none;
+        }
+        ui-button:hover {
+            background: #d0d0d0;
+        }
+        ui-button.close:hover {
+            background: #ef2a2a;
+            color: #fff;
+        }
+        .icon {
+            width: 0.6em;
+            height: 1em;
+            stroke-width: 0;
+            stroke: currentColor;
+            fill: currentColor;
+            overflow: hidden;
+        }
+        // .icon-minimize {
+        //     padding-top: 0;
+        //     margin-top: -0.1em;
+        // }
+        // .icon-maximize {
+        //     padding-top: 0.3em;
+        // }
+        // .icon-close {
+        //     padding-top: 0.2em;
+        // }
+        .icon-folder_close {
+            font-size: x-large;
+            padding-left: 0.4em;
+            color: #ffdb74;
+            stroke-width: 3px;
+            stroke: #f5c332;
+        }
+        .noTitle > span {
+            display: none;
+        }
+    `;
+    }
+
+    _render() {
+        return (
+            <div>
+                <div class="bbox"></div>
+                <div class="container">
+                    <div class="title">
+                        <span>{this.title}</span>
+                        <Button title="Réduire" type="minimize" class="minimize" onclick={() => this.minimize()}></Button>
+                        <Button title="Agrandir" type="maximize" class="maximize" onclick={() => this.maximize()}></Button>
+                        <Button title="Fermer" type="close" class="close" onclick={() => {
+                            this.classList.add("animate");
+                            this.classList.add("fadeout");
+                            setTimeout(() => this.destroy(), 200);
+                        }}></Button>
+                    </div>
+                    <div class="content">
+                        <slot></slot>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     connectedCallback() {
         // Called every time the element is inserted into the DOM.
         // Useful for running setup code, such as fetching resources or rendering.
         // Generally, you should try to delay work until this time.
-        this._style.innerHTML =
-        `
-            :host {
-                position: absolute;
-            }
-            .container {
-                width: 100%;
-                height: 100%;
-                position: absolute;
-            }
-            .title {
-                cursor: default;
-                user-select: none;
-                /* border-bottom: 1px solid #d9d9d9; */
-                color: var(--font-color, #282828);
-                font-size: var(--font-size, 0.75em);
-                // padding: var(--title-padding, 0.3em);
-                text-align: var(--title-align, center);
-                min-height: var(--min-height, 1.2em);
-                display: flex;
-                align-items: center;
-            }
-            .title > span::before {
-                content: "|";
-                padding-right: 0.5em;
-            }
-            .title > span {
-                flex: 1 0 auto;
-                text-align: left;
-                padding-left: 0.6em;
-            }
-            .title ui-button {
-                flex: 0 1 auto;
-                align-self: auto;
-                min-width: 48px;
-                min-height: 37px;
-            }
-            .bbox {
-                position: absolute;
-            }
-            ui-button {
-                background: none;
-                color: #282828;
-                border: none;
-                font-size: x-large;
-                padding: 0;
-            }
-            ui-button span {
-                display: none;
-            }
-            ui-button:hover {
-                background: #d0d0d0;
-            }
-            ui-button.close:hover {
-                background: #ef2a2a;
-                color: #fff;
-            }
-            .icon {
-                width: 0.6em;
-                height: 1em;
-                stroke-width: 0;
-                stroke: currentColor;
-                fill: currentColor;
-                overflow: hidden;
-            }
-            // .icon-minimize {
-            //     padding-top: 0;
-            //     margin-top: -0.1em;
-            // }
-            // .icon-maximize {
-            //     padding-top: 0.3em;
-            // }
-            // .icon-close {
-            //     padding-top: 0.2em;
-            // }
-            .icon-folder_close {
-                font-size: x-large;
-                padding-left: 0.4em;
-                color: #ffdb74;
-                stroke-width: 3px;
-                stroke: #f5c332;
-            }
-            .noTitle > span {
-                display: none;
-            }
-        `;
-        this.id = DOM.generateId();
-        this._setOpts();
-        this._titleElement = this._container.appendChild(<div class="title"><span>{this.title}</span></div>);
-        this._content = this._container.appendChild(<div class="content"><slot></slot></div>);
-        if (this._isMaximizedButton) {
-            this._minimizeButton = <Button title="Réduire" type="minimize" class="minimize" onclick={() => this.minimize()}></Button>;
-            this._titleElement.appendChild(this._minimizeButton);
-        }
-        if (this._isMinimizedButton) {
-            this._maximizeButton = <Button title="Agrandir" type="maximize" class="maximize" onclick={() => this.maximize()}></Button>;
-            this._titleElement.appendChild(this._maximizeButton);
-        }
-        if (this._isClosedButton) {
-            const closeButton = <Button title="Fermer" type="close" class="close" onclick={() => {
-                this.classList.add("animate");
-                this.classList.add("fadeout");
-                setTimeout(() => this.destroy(), 200);
-            }}></Button>;
-            this._titleElement.appendChild(closeButton);
-        }
+        super.connectedCallback();
+        this._bbox = this._renderElements.querySelector(".bbox") as HTMLElement;
+        this._container = this._renderElements.querySelector(".container") as HTMLElement;
+        this._titleElement = this._renderElements.querySelector(".title") as HTMLElement;
+        this._content = this._renderElements.querySelector(".content") as HTMLElement;
+        this._minimizeButton = this._renderElements.querySelector(".minimize") as HTMLElement;
+        this._maximizeButton = this._renderElements.querySelector(".maximize") as HTMLElement;
         this._icon = DOM.addIcon("folder_close", this._titleElement, this._titleElement.firstChild);
         this._bbox.style.top = - this.margins + "px";
         this._bbox.style.left = - this.margins + "px";
@@ -458,48 +471,6 @@ export default class Window extends HTMLElement {
             DOM.removeClassByPrefix(this, "docked_");
         }
         this._setBboxSize();
-    }
-
-    // Opts
-    protected _setOpts() {
-        const options = Object();
-        const executeAtLast: Array<{name: string, value: string}> = [];
-        // Attributes
-        if (this.attributes) {
-            const attributes = Array.prototype.slice.call(this.attributes);
-            attributes.forEach((element: any) => {
-                options[element.name] = element.value;
-            });
-        }
-        // Options
-        if (this._options) {
-            Object.keys(this._options).forEach((element: any) => {
-                // camelCase to dash
-                const name = element.replace( /([a-z])([A-Z])/g, "$1-$2" ).toLowerCase();
-                if (!options[name]) {
-                    options[name] = this._options[element];
-                }
-            });
-        }
-        // Attributs par défaut
-        for (const defaultAttr of this._defaultAttributes) {
-            if (defaultAttr.executeAtLast) {
-                executeAtLast.push({name: defaultAttr.name, value: defaultAttr.value});
-            }
-            if (!options[defaultAttr.name] && !defaultAttr.executeAtLast) {
-                options[defaultAttr.name] = defaultAttr.value;
-            }
-        }
-        // Mise en place des attributs et options
-        for (const name in options) {
-            if (options.hasOwnProperty(name)) {
-                // dash to camelCase
-                // tslint:disable-next-line:only-arrow-functions
-                this[name.replace(/-([a-z])/g, function(g) { return g[1].toUpperCase(); })] = options[name];
-            }
-        }
-        // Attributs à intialiser en dernier (center)
-        executeAtLast.forEach((attr) => this[attr.name] = options[attr.name] || attr.value);
     }
 
     // Events
@@ -706,5 +677,3 @@ export default class Window extends HTMLElement {
     // tache electron, service worker, generate www + create ts file ? + autre script si néecessaire ... jsx à prendre en compte + fin reorg + wapit / wapiti / speedui / node-flow / wag + generate wapiti.json ou - wapiti init, dev, prod - electron.ts à peut etre ressortir + pb du tsconfig + custom.d.ts à ressortir aussi + build à suppr
 
 }
-
-customElements.define("ui-window", Window);

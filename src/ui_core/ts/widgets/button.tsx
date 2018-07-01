@@ -1,4 +1,4 @@
-import { DOM, JSX } from "wapitis";
+import { Component, DOM, JSX } from "wapitis";
 
 interface IButtonOpts {
     title?: string;
@@ -7,8 +7,10 @@ interface IButtonOpts {
     type?: string;
 }
 
-// voir si possile de passer en htmlButtonel + style en --
-export default class Button extends HTMLElement {
+// style en --
+@Component.register("ui-button")
+
+export default class Button extends Component {
     get label(): string {
         return this.getAttribute("label") || "";
     }
@@ -23,7 +25,6 @@ export default class Button extends HTMLElement {
         DOM.setAttribute(this, "type", String(type));
     }
     protected _labelElement: HTMLElement;
-    protected _style: any;
     protected _icon: SVGSVGElement;
 
     static get observedAttributes() {
@@ -32,7 +33,6 @@ export default class Button extends HTMLElement {
 
     constructor(options?: IButtonOpts) {
         super();
-        const shadow = this.attachShadow({mode: "open"});
         if (options) {
             if (options.title) {
                 this.title = options.title;
@@ -44,13 +44,10 @@ export default class Button extends HTMLElement {
                 this.type = options.type;
             }
         }
-        this._style = shadow.appendChild(<style></style>);
-        this._labelElement = shadow.appendChild(<span></span>);
     }
 
-    connectedCallback() {
-        this._style.innerHTML =
-        `
+    _style() {
+        return  `
             .icon {
                 width: 0.6em;
                 height: 1em;
@@ -64,10 +61,20 @@ export default class Button extends HTMLElement {
                 display: none;
             }
         `;
+    }
+
+    _render() {
+        return (
+            <span></span>
+        );
+    }
+
+    connectedCallback() {
+        super.connectedCallback();
         if (this.type) {
-            this._icon = DOM.addIcon(this.type, this._labelElement.parentNode as HTMLElement, this._labelElement);
+            this._icon = DOM.addIcon(this.type, this._renderElements.parentNode as HTMLElement, this._renderElements);
         }
-        this._labelElement.innerHTML = this.label !== "" ? this.label : this.title;
+        this._renderElements.innerHTML = this.label !== "" ? this.label : this.title;
     }
 
     attributeChangedCallback(attrName: string, oldVal: any, newVal: any) {
@@ -76,5 +83,3 @@ export default class Button extends HTMLElement {
         }
     }
 }
-
-customElements.define("ui-button", Button);

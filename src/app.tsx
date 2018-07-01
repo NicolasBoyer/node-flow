@@ -46,7 +46,10 @@ const settings = document.body.appendChild(<Button title="Paramètres" type="max
 // settings.setAttribute("style", "position:absolute;top:0;font-size: xx-large;left: 1em;height: 1em;width: 1em;cursor: pointer;");
 
 settings.onclick = (ev: MouseEvent) => {
-    document.body.appendChild(<Window width="800" center="true" draggable="true" resizable="true" title="Autre"><div>Machin</div></Window>);
+    const test = {blop : true};
+    win2.appendChild(<div {...test}>Blirp</div>)
+    // win2.left(10);
+    // document.body.appendChild(<Window width="800" center="true" draggable="true" resizable="true" title="Autre"><div>Machin</div></Window>);
 };
 
 // document.onmousemove = (event: MouseEvent) => {
