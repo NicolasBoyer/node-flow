@@ -33,7 +33,7 @@ self.addEventListener("activate", event => {
             }));
         }).then(() => self.clients.claim())
     );
-});
+}); 
 
 // The fetch handler serves responses for same-origin resources from a cache.
 // If no response is found, it populates the runtime cache with the response
