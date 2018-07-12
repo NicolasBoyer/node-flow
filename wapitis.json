@@ -1,7 +1,11 @@
 {
-	"srcPath": "src/",
-	"wwwPath": "src/www",
-	"distPath": "src/../dist",
-	"startFile": "app.tsx",
-	"electronStartFile": "electronStart.ts"
+  "srcPath": "src/",
+  "wwwPath": "src/www",
+  "distPath": "src/../dist",
+  "startFile": "app.tsx",
+  "electronStartFile": "electronStart.ts",
+  "appName": "Node-flow",
+  "appDesc": "Créateur de graph. Configurateur de graph. Graph générant du code ...",
+  "themeColor": "#317EFB",
+  "cacheVersion": 15
 }

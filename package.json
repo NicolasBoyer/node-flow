@@ -18,7 +18,7 @@
     "svg.js": "^2.6.5",
     "tslint": "^5.10.0",
     "typescript": "^2.9.2",
-    "wapitis": "^0.9.8"
+    "wapitis": "^0.9.10"
   },
   "dependencies": {},
   "main": "src/../dist/electron.js"
