@@ -11,7 +11,7 @@ function createWindow() {
         // darkTheme : true,
         // height: 600,
         // webPreferences: {
-        //     devTools: DEBUG,
+        //     devTools: true,
         // },
         // width: 800,
     });
