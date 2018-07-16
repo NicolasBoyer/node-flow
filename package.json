@@ -1,6 +1,6 @@
 {
   "name": "node-flow",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "Créateur de graph. Configurateur de graph. Graph générant du code ...",
   "repository": {
     "type": "git",
