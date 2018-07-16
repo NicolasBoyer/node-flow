@@ -6,6 +6,5 @@
   "electronStartFile": "electronStart.ts",
   "appName": "node-flow",
   "appDesc": "Créateur de graph. Configurateur de graph. Graph générant du code ...",
-  "themeColor": "#317EFB",
-  "cacheVersion": 1
+  "themeColor": "#317EFB"
 }
