@@ -4,7 +4,7 @@
   "description": "Créateur de graph. Configurateur de graph. Graph générant du code ...",
   "repository": {
     "type": "git",
-    "url": "https://github.com/NicolasBoyer/node-flow.git"
+    "url": "git+https://github.com/NicolasBoyer/node-flow.git"
   },
   "keywords": [
     "graph",
@@ -16,10 +16,14 @@
   "license": "MIT",
   "devDependencies": {
     "svg.js": "^2.6.5",
-    "tslint": "^5.10.0",
+    "tslint": "^5.11.0",
     "typescript": "^2.9.2",
-    "wapitis": "^1.0.2"
+    "wapitis": "^1.0.3"
   },
   "dependencies": {},
-  "main": "src/../dist/electron.js"
+  "main": "src/../dist/electron.js",
+  "bugs": {
+    "url": "https://github.com/NicolasBoyer/node-flow/issues"
+  },
+  "homepage": "https://github.com/NicolasBoyer/node-flow#readme"
 }
